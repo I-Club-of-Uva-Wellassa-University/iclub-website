@@ -1,8 +1,15 @@
 {
-    "compilerOptions": {
-      "baseUrl": ".",
-      "paths": {
-        "@/*": ["./src/*"]
-      }
-    }
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*", "./*"]
+                }
   }
+}
+
+// Added by thilina -  "./*" alongside "./src/*" in paths to resolve module import errors and allow resolving files from the root directory
+
+// 
+
+
+
+//
