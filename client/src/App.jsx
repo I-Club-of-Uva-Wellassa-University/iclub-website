@@ -3,10 +3,12 @@ import HeroSection from '../landing/HeroSection'
 import Navbar from '../components/Navbar'
 import About from '../landing/About'
 import Stories from '../landing/Stories'
+import Loader from '../components/Loader'
 
 const App = () => {
   return (
     <div className="bg-night-950">
+      <Loader />
       <Navbar />
 
       <div className="relative">

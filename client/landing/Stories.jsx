@@ -8,7 +8,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
-// NEW: on phones, don't recalculate everything every time the address bar slides in/out
+// on phones, don't recalculate everything every time the address bar slides in/out
 ScrollTrigger.config({ ignoreMobileResize: true })
 
 const COUNT = 23
@@ -18,22 +18,17 @@ const INTRO = 1
 const START = 0.6 
 
 const FIT_WIDTH = 11 
-const BIG_MOBILE = 2 
-const SHIFT_MOBILE = -2.7 
+const BIG_MAX = 2.3
+const BIG_W = 2.4 
 const BIG_BASE_Y = 1.6 
 const BIG_HALF_H = 1.65 
+const RING_DROP = 1.73
+const PHOTO_FOOT = 0.05
 
-
+// no "stuck hover" on touch screens
 const CAN_HOVER = typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches
 
 const images = Array.from({ length: COUNT }, (_, i) => `/stories/${(i % PHOTOS) + 1}.jpg`)
-
-const captions = [
-  'Welcome day',
-  'Workshop night',
-  'Hackathon team',
-]
-const captionOf = (i) => captions[i] ?? `iClub moment ${i + 1}`
 
 function Card({ url, angle }) {
   const pop = useRef()
@@ -64,22 +59,46 @@ function Card({ url, angle }) {
   )
 }
 
-function Scene({ sectionRef, onActive, ui, portal }) {
+function Scene({ sectionRef, zoneRef, onActive, ui, portal }) {
   const ring = useRef()
-  const layout = useRef() 
-  const bigGroup = useRef() 
+  const layout = useRef()
+  const bigGroup = useRef()
   const bigs = useRef([])
   const active = useRef(0)
 
   useFrame(({ camera, size }, dt) => {
-    
     const aspect = size.width / size.height
     const worldH = 2 * camera.position.length() * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))
-    const fit = Math.min(1, (aspect * worldH) / FIT_WIDTH) 
-    const p = THREE.MathUtils.clamp((1.1 - aspect) / 0.55, 0, 1) 
-    const bigS = 1 + p * (BIG_MOBILE - 1)
 
-    layout.current.position.y = -0.7 + p * SHIFT_MOBILE
+    
+    const zoneEl = zoneRef.current
+    const zTop = zoneEl ? zoneEl.offsetTop : 0 
+    const zH = zoneEl ? Math.max(zoneEl.offsetHeight, 120) : size.height
+    const zoneFrac = zH / size.height
+    const full = zoneFrac > 0.98 
+
+    const pScreen = THREE.MathUtils.clamp((1.1 - aspect) / 0.55, 0, 1)
+    const widthFit = (aspect * worldH) / FIT_WIDTH
+
+    const bFill = THREE.MathUtils.clamp(
+      ((zoneFrac * worldH) / Math.min(1, widthFit) - (RING_DROP - PHOTO_FOOT)) / 3.3,
+      1,
+      BIG_MAX,
+    )
+    const bigS = full ? 1 + pScreen * (bFill - 1) : bFill
+    const blend = full ? pScreen : 1
+
+    
+    const compH = RING_DROP - PHOTO_FOOT + 3.3 * bigS
+    const fit = Math.min(1, widthFit, (0.94 * zoneFrac * worldH) / compH)
+
+    
+    const compCenter = (-RING_DROP + (3.3 * bigS - PHOTO_FOOT)) / 2
+    const dyPx = zTop + zH / 2 - size.height / 2
+    const worldPerPx = worldH / (size.height * fit)
+    const yZone = -dyPx * worldPerPx - compCenter
+
+    layout.current.position.y = -0.7 + blend * (yZone + 0.7)
     bigGroup.current.scale.setScalar(bigS)
     bigGroup.current.position.y = BIG_BASE_Y + (bigS - 1) * BIG_HALF_H
 
@@ -97,7 +116,7 @@ function Scene({ sectionRef, onActive, ui, portal }) {
     const total = r.height - window.innerHeight - intro
     const progress = THREE.MathUtils.clamp((-r.top - intro) / total, 0, 1)
 
-    const drift = aspect < 1 ? 10 : 30 
+    const drift = aspect < 1 ? 10 : 30
     if (ui.left.current) ui.left.current.style.transform = `translateX(${-progress * drift}px)`
     if (ui.right.current) ui.right.current.style.transform = `translateX(${progress * drift}px)`
     if (ui.bar.current) ui.bar.current.style.transform = `scaleX(${progress})`
@@ -126,7 +145,7 @@ function Scene({ sectionRef, onActive, ui, portal }) {
       <group ref={bigGroup}>
         {images.map((url, i) => (
           <group key={i} ref={(g) => (bigs.current[i] = g)} visible={i === 0}>
-            <Image url={url} scale={[2.4, 3.3]} radius={0.08} transparent />
+            <Image url={url} scale={[BIG_W, 1.6]} radius={0.08} transparent />
           </group>
         ))}
       </group>
@@ -136,7 +155,8 @@ function Scene({ sectionRef, onActive, ui, portal }) {
 
 const Stories = () => {
   const sectionRef = useRef(null)
-  const portal = useRef({ s: 1 }) 
+  const zoneRef = useRef(null)
+  const portal = useRef({ s: 1 }) // zoom of the 3D view, tweened by the timeline below
   const [current, setCurrent] = useState(0)
   const ui = { left: useRef(null), right: useRef(null), bar: useRef(null) }
   const pad = (n) => String(n).padStart(2, '0')
@@ -144,7 +164,7 @@ const Stories = () => {
   useGSAP(
     () => {
       const mm = gsap.matchMedia()
-      const inset = ((1 - START) / 2) * 100 
+      const inset = ((1 - START) / 2) * 100
 
       mm.add('(prefers-reduced-motion: no-preference)', () => {
         const tl = gsap.timeline({
@@ -189,10 +209,11 @@ const Stories = () => {
     <section
       ref={sectionRef}
       id="stories"
+      // 400vh for the ring + 100vh (INTRO) for the portal opening
       className="relative z-10 h-[500vh] bg-gradient-to-b from-[#E1F2FA] to-[#98D5EE]"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-sky-950">
-
+    
         <div className="portal-caption pointer-events-none absolute inset-x-0 bottom-[11%] z-0 flex flex-col items-center text-center md:bottom-[3%]">
           <p className="text-xs font-medium uppercase tracking-[0.35em] text-aqua-400">Chapter 02</p>
           <h2 className="mt-2 text-[clamp(1.75rem,4vw,3rem)] font-extrabold leading-none text-white">
@@ -207,48 +228,43 @@ const Stories = () => {
           </div>
 
           <div className="absolute inset-0">
-            
             <Canvas
               camera={{ position: [0, 3.5, 13.5], fov: 35 }}
               dpr={[1, 1.5]}
               style={{ touchAction: 'pan-y' }}
             >
-              <Scene sectionRef={sectionRef} onActive={setCurrent} ui={ui} portal={portal} />
+              <Scene sectionRef={sectionRef} zoneRef={zoneRef} onActive={setCurrent} ui={ui} portal={portal} />
             </Canvas>
           </div>
 
-          <div className="stories-overlay pointer-events-none absolute inset-0 will-change-transform">
-            <div className="absolute left-6 top-24 z-10 md:left-10 md:top-28">
-              <span className="inline-flex items-center gap-2 rounded-full border border-sky-950/10 bg-white/50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.25em] text-sky-900 backdrop-blur-xl">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-500 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-sky-700" />
-                </span>
-                Stories
-              </span>
+          <div className="stories-overlay pointer-events-none absolute inset-0 flex flex-col will-change-transform lg:block">
+            {/* header */}
+            <div className="relative z-10 shrink-0 lg:contents">
+              <div className="mt-4 flex flex-col items-start gap-1 px-6 md:px-10 lg:absolute lg:inset-x-0 lg:top-44 lg:z-10 lg:mt-0 lg:flex-row lg:justify-between lg:px-10 [@media(max-height:520px)]:hidden">
+                <h2
+                  ref={ui.left}
+                  className="text-[clamp(2.25rem,10vw,6.5rem)] font-extrabold leading-[0.9] tracking-tight text-sky-950 will-change-transform md:text-[clamp(2.5rem,7vw,6.5rem)]"
+                >
+                  Mo<span className="text-sky-700">ments</span>
+                </h2>
+                <h2
+                  ref={ui.right}
+                  className="text-[clamp(2.25rem,10vw,6.5rem)] font-extrabold leading-[0.9] tracking-tight will-change-transform md:text-[clamp(2.5rem,7vw,6.5rem)] lg:text-right"
+                >
+                  <span className="mr-[0.25em] text-transparent [-webkit-text-stroke:2px_#0A3C55] lg:mr-0 lg:block">
+                    from
+                  </span>
+                  <span className="bg-gradient-to-r from-sky-700 to-sky-500 bg-clip-text text-transparent lg:block">
+                    iClub
+                  </span>
+                </h2>
+              </div>
             </div>
 
-            <div className="absolute inset-x-0 top-40 z-10 flex flex-col items-start gap-1 px-6 md:top-44 md:flex-row md:justify-between md:px-10 [@media(max-height:520px)]:hidden">
-              <h2
-                ref={ui.left}
-                className="text-[clamp(2.25rem,10vw,6.5rem)] font-extrabold leading-[0.9] tracking-tight text-sky-950 will-change-transform md:text-[clamp(2.5rem,7vw,6.5rem)]"
-              >
-                Mo<span className="text-sky-700">ments</span>
-              </h2>
-              <h2
-                ref={ui.right}
-                className="text-[clamp(2.25rem,10vw,6.5rem)] font-extrabold leading-[0.9] tracking-tight will-change-transform md:text-right md:text-[clamp(2.5rem,7vw,6.5rem)]"
-              >
-                <span className="mr-[0.25em] text-transparent [-webkit-text-stroke:2px_#0A3C55] md:mr-0 md:block">
-                  from
-                </span>
-                <span className="bg-gradient-to-r from-sky-700 to-sky-500 bg-clip-text text-transparent md:block">
-                  iClub
-                </span>
-              </h2>
-            </div>
+            <div ref={zoneRef} className="min-h-0 flex-1 lg:absolute lg:inset-0" />
 
-            <div className="absolute inset-x-0 bottom-24 z-10 px-6 md:bottom-8 md:px-10">
+            {/* footer (raised on phones so the browser toolbar can't cover it) */}
+            <div className="relative z-10 shrink-0 px-6 pb-24 md:px-10 lg:absolute lg:inset-x-0 lg:bottom-8 lg:pb-0">
               <div className="mx-auto flex max-w-5xl items-end justify-between gap-6">
                 <p className="text-4xl font-bold tabular-nums text-sky-950 md:text-6xl">
                   {pad(current + 1)}
