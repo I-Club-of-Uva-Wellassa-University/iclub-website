@@ -10,102 +10,108 @@ export default function TimelineSectionMobile({ data = [] }) {
   const glowLineRef = useRef(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      if (glowLineRef.current && sectionRef.current) {
-        gsap.fromTo(
-          glowLineRef.current,
-          { height: "0%" },
-          {
-            height: "100%",
-            ease: "none",
-            scrollTrigger: {
-              trigger: ".iclub-tlm-track",
-              start: "top 55%",
-              end: "bottom 75%",
-              scrub: 0.5,
-            },
-          }
-        );
-      }
+    const mm = gsap.matchMedia();
 
-      const items = gsap.utils.toArray(".iclub-tlm-item");
-      items.forEach((item) => {
-        const dot = item.querySelector(".iclub-tlm-node-dot");
-        const branch = item.querySelector(".iclub-tlm-branch-line");
-        const year = item.querySelector(".iclub-tlm-year");
-        const mediaCard = item.querySelector(".iclub-tlm-media-card");
-        const connector = item.querySelector(".iclub-tlm-desc-connector");
-        const descBox = item.querySelector(".iclub-tlm-desc-box");
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: item,
-            start: "top 82%",
-            end: "top 45%",
-            toggleActions: "play none none reverse",
-          },
-        });
-
-        tl.to(dot, {
-          scale: 1,
-          duration: 0.25,
-          ease: "back.out(2.5)",
-        })
-          .to(
-            branch,
+    mm.add(
+      "(max-width: 768px)",
+      () => {
+        if (glowLineRef.current) {
+          gsap.fromTo(
+            glowLineRef.current,
+            { height: "0%" },
             {
-              scaleX: 1,
-              duration: 0.25,
-              ease: "power2.out",
-            },
-            "-=0.1"
-          )
-          .to(
-            year,
-            {
-              opacity: 1,
-              x: 0,
-              duration: 0.3,
-              ease: "power2.out",
-            },
-            "-=0.15"
-          )
-          .to(
-            mediaCard,
-            {
-              opacity: 1,
-              y: 0,
-              scale: 1,
-              duration: 0.4,
-              ease: "back.out(1.5)",
-            },
-            "-=0.2"
-          )
-          .to(
-            connector,
-            {
-              scaleY: 1,
-              opacity: 1,
-              duration: 0.25,
-              ease: "power2.out",
-            },
-            "-=0.2"
-          )
-          .to(
-            descBox,
-            {
-              opacity: 1,
-              y: 0,
-              scale: 1,
-              duration: 0.38,
-              ease: "back.out(1.4)",
-            },
-            "-=0.15"
+              height: "100%",
+              ease: "none",
+              scrollTrigger: {
+                trigger: ".iclub-tlm-track",
+                start: "top 55%",
+                end: "bottom 75%",
+                scrub: 0.5,
+              },
+            }
           );
-      });
-    }, sectionRef);
+        }
 
-    return () => ctx.revert();
+        const items = gsap.utils.toArray(".iclub-tlm-item");
+        items.forEach((item) => {
+          const dot = item.querySelector(".iclub-tlm-node-dot");
+          const branch = item.querySelector(".iclub-tlm-branch-line");
+          const year = item.querySelector(".iclub-tlm-year");
+          const mediaCard = item.querySelector(".iclub-tlm-media-card");
+          const connector = item.querySelector(".iclub-tlm-desc-connector");
+          const descBox = item.querySelector(".iclub-tlm-desc-box");
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: item,
+              start: "top 82%",
+              end: "top 45%",
+              toggleActions: "play none none reverse",
+            },
+          });
+
+          tl.to(dot, {
+            scale: 1,
+            duration: 0.25,
+            ease: "back.out(2.5)",
+          })
+            .to(
+              branch,
+              {
+                scaleX: 1,
+                duration: 0.25,
+                ease: "power2.out",
+              },
+              "-=0.1"
+            )
+            .to(
+              year,
+              {
+                opacity: 1,
+                x: 0,
+                duration: 0.3,
+                ease: "power2.out",
+              },
+              "-=0.15"
+            )
+            .to(
+              mediaCard,
+              {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.4,
+                ease: "back.out(1.5)",
+              },
+              "-=0.2"
+            )
+            .to(
+              connector,
+              {
+                scaleY: 1,
+                opacity: 1,
+                duration: 0.25,
+                ease: "power2.out",
+              },
+              "-=0.2"
+            )
+            .to(
+              descBox,
+              {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.38,
+                ease: "back.out(1.4)",
+              },
+              "-=0.15"
+            );
+        });
+      },
+      sectionRef
+    );
+
+    return () => mm.revert();
   }, []);
 
   const scrollToContact = () => {
@@ -116,7 +122,7 @@ export default function TimelineSectionMobile({ data = [] }) {
   };
 
   return (
-    <section className="iclub-tlm-wrapper" ref={sectionRef} id="timeline">
+    <section className="iclub-tlm-wrapper" ref={sectionRef}>
       <div className="iclub-tlm-header">
         <div className="iclub-tlm-header-left">
           <div className="iclub-tlm-pill-badge">

@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import TimelineSectionMobile from "./TimelineSectionMobile";
 import "./TimelineSection.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const TIMELINE_DATA = [
+export const TIMELINE_DATA = [
   {
     id: 1,
     year: "2018",
@@ -126,201 +127,207 @@ export default function TimelineSection() {
   const [activeIndex, setActiveIndex] = useState(1);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const track = trackRef.current;
-      const getMaxTranslateX = () =>
-        Math.max(0, LOOP_START_X + 340 - window.innerWidth);
+    const mm = gsap.matchMedia();
 
-      const svgPaths = gsap.utils.toArray(".iclub-tl-svg-draw");
-      svgPaths.forEach((path) => {
-        const len = path.getTotalLength();
-        gsap.set(path, {
-          strokeDasharray: len,
-          strokeDashoffset: len,
+    mm.add(
+      "(min-width: 769px)",
+      () => {
+        const track = trackRef.current;
+        const getMaxTranslateX = () =>
+          Math.max(0, LOOP_START_X + 340 - window.innerWidth);
+
+        const svgPaths = gsap.utils.toArray(".iclub-tl-svg-draw");
+        svgPaths.forEach((path) => {
+          const len = path.getTotalLength();
+          gsap.set(path, {
+            strokeDasharray: len,
+            strokeDashoffset: len,
+          });
         });
-      });
 
-      let loopLen = 0;
-      if (endLoopPathRef.current && endLoopGlowRef.current) {
-        loopLen = endLoopPathRef.current.getTotalLength();
-        gsap.set([endLoopPathRef.current, endLoopGlowRef.current], {
-          strokeDasharray: loopLen,
-          strokeDashoffset: loopLen,
+        let loopLen = 0;
+        if (endLoopPathRef.current && endLoopGlowRef.current) {
+          loopLen = endLoopPathRef.current.getTotalLength();
+          gsap.set([endLoopPathRef.current, endLoopGlowRef.current], {
+            strokeDasharray: loopLen,
+            strokeDashoffset: loopLen,
+          });
+        }
+
+        const milestoneEls = gsap.utils.toArray(".iclub-tl-milestone");
+        const milestoneStates = milestoneEls.map((ms, index) => {
+          const dot = ms.querySelector(".iclub-tl-node-dot");
+          const branchLine = ms.querySelector(".iclub-tl-branch-path");
+          const circleRing = ms.querySelector(".iclub-tl-circle-ring");
+          const portal = ms.querySelector(".iclub-tl-portal-glow");
+          const yearText = ms.querySelector(".iclub-tl-year");
+          const popoutCard = ms.querySelector(".iclub-tl-popout-card");
+          const descConnector = ms.querySelector(".iclub-tl-desc-connector");
+          const descBox = ms.querySelector(".iclub-tl-desc-box");
+
+          const popupTl = gsap.timeline({ paused: true });
+
+          popupTl
+            .to(dot, { scale: 1, duration: 0.22, ease: "back.out(2.5)" })
+            .to(
+              branchLine,
+              { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" },
+              "-=0.1"
+            )
+            .to(
+              circleRing,
+              { strokeDashoffset: 0, duration: 0.38, ease: "power2.out" },
+              "-=0.18"
+            )
+            .to(
+              portal,
+              { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.7)" },
+              "-=0.3"
+            )
+            .to(
+              yearText,
+              { opacity: 1, y: 0, z: 30, duration: 0.3, ease: "power3.out" },
+              "-=0.28"
+            )
+            .to(
+              popoutCard,
+              {
+                opacity: 1,
+                scale: 1,
+                rotationY: 0,
+                rotationX: 0,
+                z: 50,
+                duration: 0.45,
+                ease: "back.out(1.8)",
+              },
+              "-=0.26"
+            )
+            .to(
+              descConnector,
+              { scaleY: 1, opacity: 1, duration: 0.28, ease: "power2.out" },
+              "-=0.38"
+            )
+            .to(
+              descBox,
+              {
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                z: 30,
+                duration: 0.42,
+                ease: "back.out(1.7)",
+              },
+              "-=0.28"
+            );
+
+          return {
+            el: ms,
+            posX: TIMELINE_DATA[index].positionX,
+            popupTl,
+            isVisible: false,
+          };
         });
-      }
 
-      const milestoneEls = gsap.utils.toArray(".iclub-tl-milestone");
-      const milestoneStates = milestoneEls.map((ms, index) => {
-        const dot = ms.querySelector(".iclub-tl-node-dot");
-        const branchLine = ms.querySelector(".iclub-tl-branch-path");
-        const circleRing = ms.querySelector(".iclub-tl-circle-ring");
-        const portal = ms.querySelector(".iclub-tl-portal-glow");
-        const yearText = ms.querySelector(".iclub-tl-year");
-        const popoutCard = ms.querySelector(".iclub-tl-popout-card");
-        const descConnector = ms.querySelector(".iclub-tl-desc-connector");
-        const descBox = ms.querySelector(".iclub-tl-desc-box");
+        const masterTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            pin: true,
+            scrub: 0.7,
+            end: () => `+=${getMaxTranslateX() + 900}`,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              const p = self.progress;
 
-        const popupTl = gsap.timeline({ paused: true });
-
-        popupTl
-          .to(dot, { scale: 1, duration: 0.22, ease: "back.out(2.5)" })
-          .to(
-            branchLine,
-            { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" },
-            "-=0.1"
-          )
-          .to(
-            circleRing,
-            { strokeDashoffset: 0, duration: 0.38, ease: "power2.out" },
-            "-=0.18"
-          )
-          .to(
-            portal,
-            { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.7)" },
-            "-=0.3"
-          )
-          .to(
-            yearText,
-            { opacity: 1, y: 0, z: 30, duration: 0.3, ease: "power3.out" },
-            "-=0.28"
-          )
-          .to(
-            popoutCard,
-            {
-              opacity: 1,
-              scale: 1,
-              rotationY: 0,
-              rotationX: 0,
-              z: 50,
-              duration: 0.45,
-              ease: "back.out(1.8)",
-            },
-            "-=0.26"
-          )
-          .to(
-            descConnector,
-            { scaleY: 1, opacity: 1, duration: 0.28, ease: "power2.out" },
-            "-=0.38"
-          )
-          .to(
-            descBox,
-            {
-              opacity: 1,
-              scale: 1,
-              y: 0,
-              z: 30,
-              duration: 0.42,
-              ease: "back.out(1.7)",
-            },
-            "-=0.28"
-          );
-
-        return {
-          el: ms,
-          posX: TIMELINE_DATA[index].positionX,
-          popupTl,
-          isVisible: false,
-        };
-      });
-
-      const masterTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          pin: true,
-          scrub: 0.7,
-          end: () => `+=${getMaxTranslateX() + 900}`,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            const p = self.progress;
-
-            if (bottomBarRef.current) {
-              bottomBarRef.current.style.width = `${Math.min(100, p * 100)}%`;
-            }
-
-            if (leftHeaderRef.current) {
-              const fadeProg = Math.min(1, p * 4.5);
-              gsap.set(leftHeaderRef.current, {
-                x: -fadeProg * 180,
-                opacity: Math.max(0, 1 - fadeProg * 1.15),
-              });
-            }
-
-            const horizPhase = Math.min(1, p / 0.82);
-            const currentLineX = 180 + horizPhase * (LOOP_START_X - 180);
-
-            if (mainLineRef.current) {
-              mainLineRef.current.style.width = `${currentLineX}px`;
-            }
-
-            let currentActive = 1;
-            milestoneStates.forEach((item, idx) => {
-              if (currentLineX >= item.posX - 8) {
-                currentActive = idx + 1;
-                if (!item.isVisible) {
-                  item.isVisible = true;
-                  item.popupTl.play();
-                }
-              } else {
-                if (item.isVisible) {
-                  item.isVisible = false;
-                  item.popupTl.reverse();
-                }
+              if (bottomBarRef.current) {
+                bottomBarRef.current.style.width = `${Math.min(100, p * 100)}%`;
               }
-            });
-            setActiveIndex(currentActive);
 
-            const currentTrackX = gsap.getProperty(track, "x") || 0;
-            milestoneStates.forEach((item) => {
-              const screenX = item.posX + Number(currentTrackX);
-              if (screenX < 140) {
-                const fadeOutRatio = Math.max(0, (screenX + 80) / 220);
-                gsap.set(item.el, {
-                  opacity: fadeOutRatio,
-                  filter: `blur(${(1 - fadeOutRatio) * 4}px)`,
-                });
-              } else {
-                gsap.set(item.el, { opacity: 1, filter: "blur(0px)" });
-              }
-            });
-
-            if (p > 0.82 && loopLen > 0) {
-              const loopProgress = Math.min(1, (p - 0.82) / 0.18);
-              const drawOffset = loopLen * (1 - loopProgress);
-              gsap.set([endLoopPathRef.current, endLoopGlowRef.current], {
-                strokeDashoffset: drawOffset,
-              });
-              if (endArrowRef.current) {
-                gsap.set(endArrowRef.current, {
-                  opacity: loopProgress > 0.65 ? 1 : 0,
-                  y: loopProgress * 20,
+              if (leftHeaderRef.current) {
+                const fadeProg = Math.min(1, p * 4.5);
+                gsap.set(leftHeaderRef.current, {
+                  x: -fadeProg * 180,
+                  opacity: Math.max(0, 1 - fadeProg * 1.15),
                 });
               }
-            } else if (loopLen > 0) {
-              gsap.set([endLoopPathRef.current, endLoopGlowRef.current], {
-                strokeDashoffset: loopLen,
-              });
-              if (endArrowRef.current) {
-                gsap.set(endArrowRef.current, { opacity: 0, y: 0 });
+
+              const horizPhase = Math.min(1, p / 0.82);
+              const currentLineX = 180 + horizPhase * (LOOP_START_X - 180);
+
+              if (mainLineRef.current) {
+                mainLineRef.current.style.width = `${currentLineX}px`;
               }
-            }
+
+              let currentActive = 1;
+              milestoneStates.forEach((item, idx) => {
+                if (currentLineX >= item.posX - 8) {
+                  currentActive = idx + 1;
+                  if (!item.isVisible) {
+                    item.isVisible = true;
+                    item.popupTl.play();
+                  }
+                } else {
+                  if (item.isVisible) {
+                    item.isVisible = false;
+                    item.popupTl.reverse();
+                  }
+                }
+              });
+              setActiveIndex(currentActive);
+
+              const currentTrackX = gsap.getProperty(track, "x") || 0;
+              milestoneStates.forEach((item) => {
+                const screenX = item.posX + Number(currentTrackX);
+                if (screenX < 140) {
+                  const fadeOutRatio = Math.max(0, (screenX + 80) / 220);
+                  gsap.set(item.el, {
+                    opacity: fadeOutRatio,
+                    filter: `blur(${(1 - fadeOutRatio) * 4}px)`,
+                  });
+                } else {
+                  gsap.set(item.el, { opacity: 1, filter: "blur(0px)" });
+                }
+              });
+
+              if (p > 0.82 && loopLen > 0) {
+                const loopProgress = Math.min(1, (p - 0.82) / 0.18);
+                const drawOffset = loopLen * (1 - loopProgress);
+                gsap.set([endLoopPathRef.current, endLoopGlowRef.current], {
+                  strokeDashoffset: drawOffset,
+                });
+                if (endArrowRef.current) {
+                  gsap.set(endArrowRef.current, {
+                    opacity: loopProgress > 0.65 ? 1 : 0,
+                    y: loopProgress * 20,
+                  });
+                }
+              } else if (loopLen > 0) {
+                gsap.set([endLoopPathRef.current, endLoopGlowRef.current], {
+                  strokeDashoffset: loopLen,
+                });
+                if (endArrowRef.current) {
+                  gsap.set(endArrowRef.current, { opacity: 0, y: 0 });
+                }
+              }
+            },
           },
-        },
-      });
-
-      masterTl
-        .to(track, {
-          x: () => -getMaxTranslateX(),
-          ease: "none",
-          duration: 0.82,
-        })
-        .to(track, {
-          x: () => -getMaxTranslateX(),
-          ease: "none",
-          duration: 0.18,
         });
-    }, sectionRef);
 
-    return () => ctx.revert();
+        masterTl
+          .to(track, {
+            x: () => -getMaxTranslateX(),
+            ease: "none",
+            duration: 0.82,
+          })
+          .to(track, {
+            x: () => -getMaxTranslateX(),
+            ease: "none",
+            duration: 0.18,
+          });
+      },
+      sectionRef
+    );
+
+    return () => mm.revert();
   }, []);
 
   const handleZoneEnter = (e) => {
@@ -454,180 +461,190 @@ export default function TimelineSection() {
   };
 
   return (
-    <section className="iclub-tl-wrapper" ref={sectionRef} id="timeline">
-      <div className="iclub-tl-header-left" ref={leftHeaderRef}>
-        <div className="iclub-tl-pill-badge">
-          <span className="iclub-tl-dot"></span> TIMELINE
-        </div>
-        <h2 className="iclub-tl-main-title">Milestones</h2>
-      </div>
-
-      <div className="iclub-tl-bg-header-right">
-        <span className="iclub-tl-outline-title">Era of</span>
-        <span className="iclub-tl-solid-title">iClub</span>
-      </div>
-
-      <div className="iclub-tl-track" ref={trackRef}>
-        <div
-          className="iclub-tl-line-base"
-          style={{ width: `${LOOP_START_X}px` }}
-        ></div>
-        <div className="iclub-tl-line-glow" ref={mainLineRef}></div>
-
-        {LINE_MARKERS.map((mk, idx) => (
-          <div
-            key={idx}
-            className="iclub-tl-line-marker"
-            style={{ left: `${mk.pos}px` }}
-          >
-            <span className="iclub-tl-tick-top"></span>
-            <span className="iclub-tl-diamond"></span>
-            <span className="iclub-tl-tick-bottom"></span>
-            <span className="iclub-tl-marker-label">{mk.label}</span>
+    <div id="timeline">
+      <div className="iclub-tl-desktop-only">
+        <section className="iclub-tl-wrapper" ref={sectionRef}>
+          <div className="iclub-tl-header-left" ref={leftHeaderRef}>
+            <div className="iclub-tl-pill-badge">
+              <span className="iclub-tl-dot"></span> TIMELINE
+            </div>
+            <h2 className="iclub-tl-main-title">Milestones</h2>
           </div>
-        ))}
 
-        {TIMELINE_DATA.map((item) => (
-          <div
-            key={item.id}
-            className={`iclub-tl-milestone iclub-tl-${item.type}`}
-            style={{ left: `${item.positionX}px` }}
-          >
-            <div className="iclub-tl-node-dot"></div>
+          <div className="iclub-tl-bg-header-right">
+            <span className="iclub-tl-outline-title">Era of</span>
+            <span className="iclub-tl-solid-title">iClub</span>
+          </div>
 
-            {item.type === "up" ? (
-              <svg
-                className="iclub-tl-svg iclub-tl-svg-up"
-                width="350"
-                height="200"
-                viewBox="0 0 350 200"
-              >
-                <path
-                  className="iclub-tl-branch-path iclub-tl-svg-draw"
-                  d="M 20 200 L 20 85 L 175 85"
-                />
-                <circle
-                  className="iclub-tl-circle-ring iclub-tl-svg-draw"
-                  cx="245"
-                  cy="85"
-                  r="70"
-                />
-              </svg>
-            ) : (
-              <svg
-                className="iclub-tl-svg iclub-tl-svg-down"
-                width="350"
-                height="200"
-                viewBox="0 0 350 200"
-              >
-                <path
-                  className="iclub-tl-branch-path iclub-tl-svg-draw"
-                  d="M 20 0 L 20 115 L 175 115"
-                />
-                <circle
-                  className="iclub-tl-circle-ring iclub-tl-svg-draw"
-                  cx="245"
-                  cy="115"
-                  r="70"
-                />
-              </svg>
-            )}
+          <div className="iclub-tl-track" ref={trackRef}>
+            <div
+              className="iclub-tl-line-base"
+              style={{ width: `${LOOP_START_X}px` }}
+            ></div>
+            <div className="iclub-tl-line-glow" ref={mainLineRef}></div>
 
-            <div className="iclub-tl-content-box">
-              <div className="iclub-tl-year">{item.year}</div>
-
+            {LINE_MARKERS.map((mk, idx) => (
               <div
-                className="iclub-tl-hover-zone"
-                onMouseEnter={handleZoneEnter}
-                onMouseMove={handleZoneMove}
-                onMouseLeave={handleZoneLeave}
+                key={idx}
+                className="iclub-tl-line-marker"
+                style={{ left: `${mk.pos}px` }}
               >
-                <div className="iclub-tl-circle-portal">
-                  <div className="iclub-tl-portal-glow"></div>
-                  <div className="iclub-tl-popout-card">
-                    <div className="iclub-tl-card-inner">
-                      <img src={item.image} alt={item.title} />
-                      <div className="iclub-tl-card-info">
-                        <h4>{item.title}</h4>
-                        <p>{item.subtitle}</p>
+                <span className="iclub-tl-tick-top"></span>
+                <span className="iclub-tl-diamond"></span>
+                <span className="iclub-tl-tick-bottom"></span>
+                <span className="iclub-tl-marker-label">{mk.label}</span>
+              </div>
+            ))}
+
+            {TIMELINE_DATA.map((item) => (
+              <div
+                key={item.id}
+                className={`iclub-tl-milestone iclub-tl-${item.type}`}
+                style={{ left: `${item.positionX}px` }}
+              >
+                <div className="iclub-tl-node-dot"></div>
+
+                {item.type === "up" ? (
+                  <svg
+                    className="iclub-tl-svg iclub-tl-svg-up"
+                    width="350"
+                    height="200"
+                    viewBox="0 0 350 200"
+                  >
+                    <path
+                      className="iclub-tl-branch-path iclub-tl-svg-draw"
+                      d="M 20 200 L 20 85 L 175 85"
+                    />
+                    <circle
+                      className="iclub-tl-circle-ring iclub-tl-svg-draw"
+                      cx="245"
+                      cy="85"
+                      r="70"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="iclub-tl-svg iclub-tl-svg-down"
+                    width="350"
+                    height="200"
+                    viewBox="0 0 350 200"
+                  >
+                    <path
+                      className="iclub-tl-branch-path iclub-tl-svg-draw"
+                      d="M 20 0 L 20 115 L 175 115"
+                    />
+                    <circle
+                      className="iclub-tl-circle-ring iclub-tl-svg-draw"
+                      cx="245"
+                      cy="115"
+                      r="70"
+                    />
+                  </svg>
+                )}
+
+                <div className="iclub-tl-content-box">
+                  <div className="iclub-tl-year">{item.year}</div>
+
+                  <div
+                    className="iclub-tl-hover-zone"
+                    onMouseEnter={handleZoneEnter}
+                    onMouseMove={handleZoneMove}
+                    onMouseLeave={handleZoneLeave}
+                  >
+                    <div className="iclub-tl-circle-portal">
+                      <div className="iclub-tl-portal-glow"></div>
+                      <div className="iclub-tl-popout-card">
+                        <div className="iclub-tl-card-inner">
+                          <img src={item.image} alt={item.title} />
+                          <div className="iclub-tl-card-info">
+                            <h4>{item.title}</h4>
+                            <p>{item.subtitle}</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="iclub-tl-desc-wrapper">
-              <div className="iclub-tl-desc-connector"></div>
-              <div className="iclub-tl-desc-box">
-                <div className="iclub-tl-desc-box-inner">
-                  <div className="iclub-tl-desc-tag">
-                    <span className="iclub-tl-desc-bullet"></span>
-                    <span className="iclub-tl-highlight">{item.highlight}</span>
+                <div className="iclub-tl-desc-wrapper">
+                  <div className="iclub-tl-desc-connector"></div>
+                  <div className="iclub-tl-desc-box">
+                    <div className="iclub-tl-desc-box-inner">
+                      <div className="iclub-tl-desc-tag">
+                        <span className="iclub-tl-desc-bullet"></span>
+                        <span className="iclub-tl-highlight">
+                          {item.highlight}
+                        </span>
+                      </div>
+                      <p className="iclub-tl-desc-text">
+                        <strong className="iclub-tl-navy-text">
+                          {item.title}:{" "}
+                        </strong>
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
-                  <p className="iclub-tl-desc-text">
-                    <strong className="iclub-tl-navy-text">
-                      {item.title}:{" "}
-                    </strong>
-                    {item.description}
-                  </p>
                 </div>
               </div>
+            ))}
+
+            <div
+              className="iclub-tl-end-loop-container"
+              style={{ left: `${LOOP_START_X}px` }}
+            >
+              <svg
+                className="iclub-tl-end-loop-svg"
+                width="340"
+                height="850"
+                viewBox="0 0 340 850"
+              >
+                <path
+                  className="iclub-tl-loop-base"
+                  d="M 0 180 L 120 180 C 255 180, 255 25, 150 25 C 55 25, 85 180, 130 235 L 130 850"
+                />
+                <path
+                  ref={endLoopGlowRef}
+                  className="iclub-tl-loop-glow"
+                  d="M 0 180 L 120 180 C 255 180, 255 25, 150 25 C 55 25, 85 180, 130 235 L 130 850"
+                />
+                <path
+                  ref={endLoopPathRef}
+                  className="iclub-tl-loop-core"
+                  d="M 0 180 L 120 180 C 255 180, 255 25, 150 25 C 55 25, 85 180, 130 235 L 130 850"
+                />
+              </svg>
+
+              <div
+                className="iclub-tl-end-arrow"
+                ref={endArrowRef}
+                onClick={scrollToContact}
+              >
+                <span>SCROLL TO CONTACT</span>
+                <div className="iclub-tl-arrow-icon">&#8595;</div>
+              </div>
             </div>
           </div>
-        ))}
 
-        <div
-          className="iclub-tl-end-loop-container"
-          style={{ left: `${LOOP_START_X}px` }}
-        >
-          <svg
-            className="iclub-tl-end-loop-svg"
-            width="340"
-            height="850"
-            viewBox="0 0 340 850"
-          >
-            <path
-              className="iclub-tl-loop-base"
-              d="M 0 180 L 120 180 C 255 180, 255 25, 150 25 C 55 25, 85 180, 130 235 L 130 850"
-            />
-            <path
-              ref={endLoopGlowRef}
-              className="iclub-tl-loop-glow"
-              d="M 0 180 L 120 180 C 255 180, 255 25, 150 25 C 55 25, 85 180, 130 235 L 130 850"
-            />
-            <path
-              ref={endLoopPathRef}
-              className="iclub-tl-loop-core"
-              d="M 0 180 L 120 180 C 255 180, 255 25, 150 25 C 55 25, 85 180, 130 235 L 130 850"
-            />
-          </svg>
-
-          <div
-            className="iclub-tl-end-arrow"
-            ref={endArrowRef}
-            onClick={scrollToContact}
-          >
-            <span>SCROLL TO CONTACT</span>
-            <div className="iclub-tl-arrow-icon">&#8595;</div>
+          <div className="iclub-tl-bottom-hud">
+            <div className="iclub-tl-hud-row">
+              <div className="iclub-tl-counter">
+                <strong>{String(activeIndex).padStart(2, "0")}</strong>
+                <span> / {String(TIMELINE_DATA.length).padStart(2, "0")}</span>
+              </div>
+              <div className="iclub-tl-scroll-label">
+                SCROLL <br /> <span>&#8964;</span>
+              </div>
+            </div>
+            <div className="iclub-tl-progress-track">
+              <div className="iclub-tl-progress-fill" ref={bottomBarRef}></div>
+            </div>
           </div>
-        </div>
+        </section>
       </div>
 
-      <div className="iclub-tl-bottom-hud">
-        <div className="iclub-tl-hud-row">
-          <div className="iclub-tl-counter">
-            <strong>{String(activeIndex).padStart(2, "0")}</strong>
-            <span> / {String(TIMELINE_DATA.length).padStart(2, "0")}</span>
-          </div>
-          <div className="iclub-tl-scroll-label">
-            SCROLL <br /> <span>&#8964;</span>
-          </div>
-        </div>
-        <div className="iclub-tl-progress-track">
-          <div className="iclub-tl-progress-fill" ref={bottomBarRef}></div>
-        </div>
+      <div className="iclub-tl-mobile-only">
+        <TimelineSectionMobile data={TIMELINE_DATA} />
       </div>
-    </section>
+    </div>
   );
 }
