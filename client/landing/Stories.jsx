@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import * as THREE from 'three'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Image, useTexture } from '@react-three/drei'
 import { ChevronDown } from 'lucide-react'
 import gsap from 'gsap'
@@ -19,13 +19,14 @@ const START = 0.6
 
 const FIT_WIDTH = 11 
 const BIG_MAX = 2.3
-const BIG_W = 2.4 
-const BIG_BASE_Y = 1.6 
-const BIG_HALF_H = 1.65 
-const RING_DROP = 1.73
-const PHOTO_FOOT = 0.05
+const BIG_DESKTOP = [4.8, 3.3] 
+const BIG_PHONE = [2.4, 1.6] 
+const GAP_DESKTOP = 0
+const GAP_PHONE = 0
 
-// no "stuck hover" on touch screens
+const PHOTO_FOOT = 0.05
+const RING_DROP = 1.73
+
 const CAN_HOVER = typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches
 
 const images = Array.from({ length: COUNT }, (_, i) => `/stories/${(i % PHOTOS) + 1}.jpg`)
@@ -65,14 +66,19 @@ function Scene({ sectionRef, zoneRef, onActive, ui, portal }) {
   const bigGroup = useRef()
   const bigs = useRef([])
   const active = useRef(0)
+  const viewSize = useThree((s) => s.size)
+  const phone = viewSize.width / viewSize.height < 1.1
+  const [bigW, bigH] = phone ? BIG_PHONE : BIG_DESKTOP
 
   useFrame(({ camera, size }, dt) => {
     const aspect = size.width / size.height
     const worldH = 2 * camera.position.length() * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))
+    const isPhone = aspect < 1.1
+    const H = isPhone ? BIG_PHONE[1] : BIG_DESKTOP[1]
+    const foot = -PHOTO_FOOT + (isPhone ? GAP_PHONE : GAP_DESKTOP)
 
-    
     const zoneEl = zoneRef.current
-    const zTop = zoneEl ? zoneEl.offsetTop : 0 
+    const zTop = zoneEl ? zoneEl.offsetTop : 0
     const zH = zoneEl ? Math.max(zoneEl.offsetHeight, 120) : size.height
     const zoneFrac = zH / size.height
     const full = zoneFrac > 0.98 
@@ -81,27 +87,26 @@ function Scene({ sectionRef, zoneRef, onActive, ui, portal }) {
     const widthFit = (aspect * worldH) / FIT_WIDTH
 
     const bFill = THREE.MathUtils.clamp(
-      ((zoneFrac * worldH) / Math.min(1, widthFit) - (RING_DROP - PHOTO_FOOT)) / 3.3,
+      ((zoneFrac * worldH) / Math.min(1, widthFit) - (RING_DROP + foot)) / H,
       1,
       BIG_MAX,
     )
     const bigS = full ? 1 + pScreen * (bFill - 1) : bFill
     const blend = full ? pScreen : 1
 
-    
-    const compH = RING_DROP - PHOTO_FOOT + 3.3 * bigS
-    const fit = Math.min(1, widthFit, (0.94 * zoneFrac * worldH) / compH)
+    const top = foot + H * bigS
+    const fit = Math.min(1, widthFit, (0.94 * zoneFrac * worldH) / (RING_DROP + top))
 
-    
-    const compCenter = (-RING_DROP + (3.3 * bigS - PHOTO_FOOT)) / 2
+    const compCenter = (-RING_DROP + top) / 2
     const dyPx = zTop + zH / 2 - size.height / 2
     const worldPerPx = worldH / (size.height * fit)
     const yZone = -dyPx * worldPerPx - compCenter
 
     layout.current.position.y = -0.7 + blend * (yZone + 0.7)
     bigGroup.current.scale.setScalar(bigS)
-    bigGroup.current.position.y = BIG_BASE_Y + (bigS - 1) * BIG_HALF_H
+    bigGroup.current.position.y = foot + 0.5 * H * bigS
 
+    // zoom = portal opening x fit-to-zone
     const z = portal.current.s * fit
     if (Math.abs(camera.zoom - z) > 0.0005) {
       camera.zoom = z
@@ -145,7 +150,7 @@ function Scene({ sectionRef, zoneRef, onActive, ui, portal }) {
       <group ref={bigGroup}>
         {images.map((url, i) => (
           <group key={i} ref={(g) => (bigs.current[i] = g)} visible={i === 0}>
-            <Image url={url} scale={[BIG_W, 1.6]} radius={0.08} transparent />
+            <Image url={url} scale={[bigW, bigH]} radius={0.08} transparent />
           </group>
         ))}
       </group>
@@ -156,7 +161,7 @@ function Scene({ sectionRef, zoneRef, onActive, ui, portal }) {
 const Stories = () => {
   const sectionRef = useRef(null)
   const zoneRef = useRef(null)
-  const portal = useRef({ s: 1 }) // zoom of the 3D view, tweened by the timeline below
+  const portal = useRef({ s: 1 })
   const [current, setCurrent] = useState(0)
   const ui = { left: useRef(null), right: useRef(null), bar: useRef(null) }
   const pad = (n) => String(n).padStart(2, '0')
@@ -209,7 +214,6 @@ const Stories = () => {
     <section
       ref={sectionRef}
       id="stories"
-      // 400vh for the ring + 100vh (INTRO) for the portal opening
       className="relative z-10 h-[500vh] bg-gradient-to-b from-[#E1F2FA] to-[#98D5EE]"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-sky-950">
@@ -263,7 +267,6 @@ const Stories = () => {
 
             <div ref={zoneRef} className="min-h-0 flex-1 lg:absolute lg:inset-0" />
 
-            {/* footer (raised on phones so the browser toolbar can't cover it) */}
             <div className="relative z-10 shrink-0 px-6 pb-24 md:px-10 lg:absolute lg:inset-x-0 lg:bottom-8 lg:pb-0">
               <div className="mx-auto flex max-w-5xl items-end justify-between gap-6">
                 <p className="text-4xl font-bold tabular-nums text-sky-950 md:text-6xl">

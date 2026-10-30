@@ -13,19 +13,11 @@ const NAVY = '#1B1E4C'
 const AQUA = '#5FD4F0'
 const SILVER = '#e6eef7'
 
-// the iClub mark, traced from your logo PNG (pixel coordinates)
 const MARK_PX = [
   [453.4, 460.2], [349.9, 460.0], [324.6, 492.6], [323.3, 460.5], [285.1, 498.4], [347.9, 499.4],
   [293.1, 575.4], [369.6, 575.6], [392.8, 543.5], [360.5, 542.9], [391.2, 499.1], [425.6, 498.6],
 ]
 
-// ── layout ──────────────────────────────────────────────────────────────────
-// fx / fy : position as a fraction of the screen width / height, measured from the centre
-// sw      : size (largest dimension) as a fraction of the screen width
-// depth   : how far it shifts with the mouse (bigger = feels closer)
-// amp     : how far it floats up and down
-// tilt    : starting rotation [x, y, z]     sway: gentle back-and-forth rotation [x, y]
-// spin    : continuous turning speed        follow: how much it turns toward the cursor
 const WIDE = [
   { id: 'mark', kind: 'mark', fx:  0.34,  fy: -0.28, sw: 0.17,  depth: 1.6, amp: 0.016, speed: 0.55, phase: 0.0, tilt: [0.12, -0.35, 0.06], sway: [0.1, 0.38],  spin: 0,   follow: 1 },
   { id: 'cap',  kind: 'cap',  fx: -0.365, fy: -0.2,  sw: 0.14,  depth: 1.2, amp: 0.02,  speed: 0.5,  phase: 1.7, tilt: [0.5, 0.25, 0.08],   sway: [0.08, 0.3],  spin: 0,   follow: 0.7 },

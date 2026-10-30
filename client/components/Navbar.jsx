@@ -80,7 +80,7 @@ const Navbar = () => {
             }} 
                 className="relative group flex h-12 items-center overflow-hidden rounded-full bg-gradient-to-l from-cyan-300 to-cyan-100 px-6 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(137,203,219,0.35)]"
             >
-                <img src="/public/Logo/ilogo.png" alt="logo" className='relative h-auto w-[100px] object-contain transition-transform duration-300 group-hover:scale-105' />
+                <img src="/Logo/ilogo.png" alt="iClub logo" loading="eager" decoding="sync" className='relative h-auto w-[100px] object-contain transition-transform duration-300 group-hover:scale-105' />
                 <span className='pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/70 to-transparent transition-transform duration-700 group-hover:translate-x-full' />
             </a>
             
