@@ -185,7 +185,7 @@ const About = () => {
     <section
     ref={root}
     id="about"
-    className="relative z-10 overflow-x-clip bg-sky-950 px-6 py-28 md:px-10 md:py-36"
+    className="relative z-10 overflow-x-clip bg-sky-950 px-6 py-28 md:px-10 md:py-36 rounded-t-4xl"
   >
     <div className="about-glow pointer-events-none absolute -right-32 top-1/3 h-[420px] w-[420px] rounded-full bg-aqua-400/15 blur-3xl will-change-transform" />
 
