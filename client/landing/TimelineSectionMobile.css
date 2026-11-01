@@ -1,0 +1,379 @@
+/* Mobile Vertical Timeline Section */
+.iclub-tlm-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #b5e0f7 0%, #d8f0fc 100%);
+  color: #0d436b;
+  padding: 88px 16px 70px 16px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  user-select: none;
+}
+
+/* Header Container */
+.iclub-tlm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 42px;
+  padding: 0 4px;
+}
+
+.iclub-tlm-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.82);
+  padding: 5px 14px;
+  border-radius: 30px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  color: #0d436b;
+  margin-bottom: 8px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(13, 67, 107, 0.08);
+}
+
+.iclub-tlm-dot {
+  width: 7px;
+  height: 7px;
+  background: #1d70b8;
+  border-radius: 50%;
+}
+
+.iclub-tlm-main-title {
+  font-size: 2.15rem;
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1.05;
+  margin: 0;
+  background: linear-gradient(90deg, #062b45 0%, #155582 50%, #3285b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.iclub-tlm-header-right {
+  text-align: right;
+  line-height: 1;
+}
+
+.iclub-tlm-outline-title {
+  display: block;
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: transparent;
+  -webkit-text-stroke: 1.5px #0d4a75;
+  line-height: 1;
+}
+
+.iclub-tlm-solid-title {
+  display: block;
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: #2f74a3;
+  line-height: 0.9;
+}
+
+/* Left Vertical Timeline Track */
+.iclub-tlm-track {
+  position: relative;
+  max-width: 460px;
+  margin: 0 auto;
+  padding-left: 42px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.iclub-tlm-line-base {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 14px;
+  width: 5px;
+  background: rgba(13, 67, 107, 0.16);
+  border-radius: 6px;
+}
+
+.iclub-tlm-line-glow {
+  position: absolute;
+  top: 0;
+  left: 13px;
+  width: 7px;
+  height: 0%;
+  background: linear-gradient(180deg, #0d4a75 0%, #00b4d8 65%, #38bdf8 100%);
+  box-shadow: 0 0 16px rgba(0, 180, 216, 0.9), 0 0 30px rgba(56, 189, 248, 0.7);
+  border-radius: 6px;
+  z-index: 2;
+}
+
+/* Individual Milestone Item */
+.iclub-tlm-item {
+  position: relative;
+  width: 100%;
+}
+
+/* Glowing Node Dot on Left Line */
+.iclub-tlm-node-dot {
+  position: absolute;
+  top: 18px;
+  left: -26px;
+  width: 22px;
+  height: 22px;
+  background: #0d4a75;
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  box-shadow: 0 0 16px rgba(0, 180, 216, 0.95), 0 0 26px #ffffff;
+  z-index: 5;
+  box-sizing: border-box;
+}
+
+/* White Branch Connecting Line to Card */
+.iclub-tlm-branch-line {
+  position: absolute;
+  top: 16px;
+  left: -16px;
+  width: 20px;
+  height: 4px;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 3px 8px rgba(13, 74, 117, 0.2);
+  transform-origin: left center;
+  transform: scaleX(0);
+  z-index: 3;
+}
+
+/* Right-Side Content Container */
+.iclub-tlm-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.iclub-tlm-year-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.iclub-tlm-year {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #072a47;
+  line-height: 1;
+  text-shadow: 0 4px 12px rgba(255, 255, 255, 0.9);
+  letter-spacing: -0.8px;
+  opacity: 0;
+  transform: translateX(-12px);
+}
+
+.iclub-tlm-step-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #2f74a3;
+  background: rgba(255, 255, 255, 0.65);
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+/* Media Image Card */
+.iclub-tlm-media-card {
+  position: relative;
+  width: 100%;
+  margin-bottom: 18px;
+  opacity: 0;
+  transform: translateY(16px) scale(0.92);
+}
+
+.iclub-tlm-portal-glow {
+  position: absolute;
+  inset: -8px;
+  border-radius: 22px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.75),
+    rgba(0, 180, 216, 0.22)
+  );
+  filter: blur(8px);
+  z-index: 0;
+}
+
+.iclub-tlm-img-box {
+  position: relative;
+  width: 100%;
+  height: 195px;
+  border-radius: 16px;
+  z-index: 1;
+}
+
+.iclub-tlm-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 3.5px solid #ffffff;
+  box-shadow: 0 14px 30px rgba(13, 67, 107, 0.26);
+  box-sizing: border-box;
+  display: block;
+}
+
+/* Dark Floating Caption Pill Over Image Bottom */
+.iclub-tlm-card-info {
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 90%;
+  background: #1e2631;
+  color: #ffffff;
+  padding: 7px 16px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  z-index: 3;
+}
+
+.iclub-tlm-card-info h4 {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #7cd4fc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.iclub-tlm-card-info p {
+  margin: 2px 0 0;
+  font-size: 0.7rem;
+  color: #f1f5f9;
+}
+
+/* Vertical Connector Line Between Photo & Description Box */
+.iclub-tlm-desc-connector {
+  width: 3px;
+  height: 24px;
+  margin-left: 24px;
+  background: linear-gradient(180deg, #ffffff, #00b4d8);
+  border-radius: 4px;
+  transform-origin: top center;
+  transform: scaleY(0);
+  opacity: 0;
+}
+
+/* Description Card Box (Matches Desktop Style) */
+.iclub-tlm-desc-box {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  border-left: 5px solid #072a47;
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 12px 26px rgba(13, 67, 107, 0.14);
+  box-sizing: border-box;
+  opacity: 0;
+  transform: translateY(12px) scale(0.95);
+}
+
+.iclub-tlm-desc-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #072a47;
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 10px rgba(7, 42, 71, 0.2);
+}
+
+.iclub-tlm-desc-bullet {
+  width: 6px;
+  height: 6px;
+  background: #38bdf8;
+  border-radius: 50%;
+}
+
+.iclub-tlm-highlight {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+}
+
+.iclub-tlm-desc-text {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #0f2942;
+  font-weight: 500;
+}
+
+.iclub-tlm-navy-text {
+  color: #072a47;
+  font-weight: 800;
+}
+
+/* Bottom Scroll to Contact Button */
+.iclub-tlm-end-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-top: 8px;
+  cursor: pointer;
+}
+
+.iclub-tlm-end-dot {
+  position: absolute;
+  left: -26px;
+  width: 18px;
+  height: 18px;
+  background: #00b4d8;
+  border: 3.5px solid #ffffff;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 14px rgba(0, 180, 216, 0.9);
+  z-index: 4;
+}
+
+.iclub-tlm-end-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #072a47;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 30px;
+  box-shadow: 0 8px 20px rgba(7, 42, 71, 0.25);
+}
+
+.iclub-tlm-end-btn span {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+
+.iclub-tlm-arrow-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00b4d8, #38bdf8);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 900;
+}
