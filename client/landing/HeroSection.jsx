@@ -217,7 +217,7 @@ const HeroSection = () => {
       <div className='pointer-events-none relative z-20 flex h-full flex-col items-center justify-center px-6 text-center'>
 
         <div ref={blockRef} className='flex flex-col items-center'>
-          <h1 className='text-[clamp(2.85rem,6.4vw,5rem)] font-extrabold leading-[1.05] tracking-tight md:text-[clamp(1.6rem,5.6vw,5rem)]'>
+          <h1 className='text-[clamp(2.25rem,6.4vw,5rem)] font-extrabold leading-[1.05] tracking-tight md:text-[clamp(1.6rem,5.6vw,5rem)]'>
             <span className='block overflow-hidden pb-2'>
               <span className='hero-line block whitespace-nowrap'>
                 <span className='relative inline-block text-sky-950'>

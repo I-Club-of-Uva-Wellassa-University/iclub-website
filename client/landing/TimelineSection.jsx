@@ -461,7 +461,7 @@ export default function TimelineSection() {
   };
 
   return (
-    <div id="timeline">
+    <div id="timeLine">
       <div className="iclub-tl-desktop-only">
         <section className="iclub-tl-wrapper" ref={sectionRef}>
           <div className="iclub-tl-header-left" ref={leftHeaderRef}>
