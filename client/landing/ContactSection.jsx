@@ -632,7 +632,7 @@ export default function ContactSection() {
             <h2 className="iclub-ct-main-title">Contact Us</h2>
             <p className="iclub-ct-subtitle">
               Have an idea, partnership proposal, or question about our upcoming
-              events at Uva Wellassa University Reach out to our executive team
+              events at Uva Wellassa University? Reach out to our executive team
               or connect with our official channels below.
             </p>
           </div>

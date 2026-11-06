@@ -204,7 +204,7 @@ const TRANSITION_GATES = [
   { pos: 6800, label: "EXPLORE FUTURE", sectionKey: "future" },
 ];
 
-const LOOP_START_X = 10300;
+const LOOP_START_X = 10400;
 const GLITCH_CHARS = "!<>-_\\/[]{}=+*^?#01";
 
 export default function TimelineSection() {
@@ -381,9 +381,9 @@ export default function TimelineSection() {
               descBox,
               {
                 opacity: 1,
-                scale: 1.2,
-                y: 5,
-                z: 40,
+                scale: 1,
+                y: 0,
+                z: 30,
                 duration: 0.42,
                 ease: "back.out(1.7)",
               },
@@ -536,14 +536,13 @@ export default function TimelineSection() {
 
     const maxTx = Math.max(0, LOOP_START_X + 420 - window.innerWidth);
     let targetWorldX = 0;
-    const centerOffset = window.innerWidth * 0.5;
 
-if (targetKey === "ongoing") {
-      targetWorldX = Math.max(0, 590 - centerOffset);
+    if (targetKey === "ongoing") {
+      targetWorldX = 0;
     } else if (targetKey === "past") {
-      targetWorldX = Math.max(0, 3950 - centerOffset);
+      targetWorldX = Math.max(0, 3950 - window.innerWidth * 0.32);
     } else if (targetKey === "future") {
-      targetWorldX = Math.max(0, 7300 - centerOffset);
+      targetWorldX = Math.max(0, 7300 - window.innerWidth * 0.32);
     }
 
     const horizRatio = maxTx > 0 ? Math.min(1, targetWorldX / maxTx) : 0;
@@ -567,9 +566,9 @@ if (targetKey === "ongoing") {
 
     if (cardInner) {
       gsap.to(cardInner, {
-        scale: 1.22,
+        scale: 1.1,
         z: 90,
-        y: -40,
+        y: -2,
         duration: 0.4,
         ease: "power3.out",
         overwrite: "auto",
@@ -638,7 +637,7 @@ if (targetKey === "ongoing") {
       gsap.to(cardInner, {
         scale: 1,
         z: 0,
-        y: -20,
+        y: 0,
         rotationX: 0,
         rotationY: 0,
         duration: 0.55,
@@ -841,6 +840,7 @@ if (targetKey === "ongoing") {
               className="iclub-tl-end-loop-container"
               style={{ left: `${LOOP_START_X}px` }}
             >
+
               <img
                 src="/Logo/ilogo.png"
                 alt="iClub Logo"

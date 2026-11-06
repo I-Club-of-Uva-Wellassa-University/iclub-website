@@ -301,14 +301,16 @@
   position: absolute;
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 16px;
   transform-style: preserve-3d;
 }
 
-.iclub-tl-up .iclub-tl-content-box { bottom: 48px; left: 44px; }
-.iclub-tl-down .iclub-tl-content-box { top: 48px; left: 44px; }
+.iclub-tl-up .iclub-tl-content-box { bottom: 30px; left: 32px; }
+.iclub-tl-down .iclub-tl-content-box { top: 30px; left: 32px; }
 
 .iclub-tl-year {
+  width: 92px;
+  text-align: center;
   font-size: 2.5rem;
   font-weight: 900;
   color: #072a47;
@@ -359,6 +361,7 @@
   position: relative;
   width: 165px;
   height: 142px;
+  top: -4px;
   transform: translateZ(50px) scale(0.35) rotateY(-20deg) rotateX(10deg);
   opacity: 0;
   transform-style: preserve-3d;
@@ -367,7 +370,7 @@
 
 .iclub-tl-card-inner {
   width: 100%;
-  height: 100%;
+  height: 95%;
   position: relative;
   transform-style: preserve-3d;
   will-change: transform;
@@ -377,6 +380,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 80%;
   border-radius: 14px;
   border: 3.5px solid #ffffff;
   box-shadow: 0 18px 36px rgba(13, 67, 107, 0.32);
@@ -390,7 +394,7 @@
 
 .iclub-tl-card-info {
   position: absolute;
-  bottom: -20px;
+  bottom: -10px;
   left: 50%;
   transform: translateX(-50%) translateZ(25px);
   background: #1e2631;
@@ -417,28 +421,17 @@
   z-index: 12;
 }
 
-.iclub-tl-up .iclub-tl-desc-wrapper { top: -12px; display: flex; }
+.iclub-tl-up .iclub-tl-desc-wrapper { top: 14px; }
 .iclub-tl-down .iclub-tl-desc-wrapper { bottom: 14px; flex-direction: column-reverse; }
 
 .iclub-tl-desc-connector {
   width: 3px;
-  height: 24px;
+  height: 34px;
   background: linear-gradient(180deg, #ffffff, #00b4d8);
   border-radius: 4px;
   transform: scaleY(0);
   opacity: 0;
   transform-origin: top center;
-}
-
-
-.ms-theme-ongoing .iclub-tl-up .iclub-tl-desc-box,
-.iclub-tl-up .iclub-tl-desc-box {
-  transform: translateY(60px); /* මෙතැනින් විස්තර පෙට්ටිය පමණක් උඩට හෝ පහළට පාලනය කළ හැක */
-}
-
-.iclub-tl-up .iclub-tl-desc-connector {
-  transform-origin: top center;
-  background: linear-gradient(180deg, #ffffff, #00b4d8);
 }
 
 .iclub-tl-down .iclub-tl-desc-connector {
@@ -495,19 +488,6 @@
   height: 620px;
   pointer-events: none;
   z-index: 8;
-  margin-left: -10px;
-}
-
-.iclub-tl-gap-logo {
-  position: absolute;
-  top: 180px;
-  left: -58px;
-  width: 95px;
-  height: auto;
-  transform: translate(-50%, -50%);
-  z-index: 12;
-  pointer-events: none;
-  filter: drop-shadow(0 6px 16px rgba(0, 180, 216, 0.35));
 }
 
 .iclub-tl-end-loop-svg { overflow: visible; }
@@ -644,4 +624,18 @@
 @media screen and (max-width: 768px) {
   .iclub-tl-desktop-only { display: none !important; }
   .iclub-tl-mobile-only { display: block !important; }
+}
+
+
+
+.iclub-tl-gap-logo {
+  position: absolute;
+  top: 180px;
+  left: -63px;
+  width: 95px;
+  height: auto;
+  transform: translate(-50%, -50%);
+  z-index: 12;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 16px rgba(0, 180, 216, 0.35));
 }

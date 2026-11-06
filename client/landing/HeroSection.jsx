@@ -212,7 +212,8 @@ const HeroSection = () => {
       </div>
 
       <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,rgba(234,238,246,0.7)_0%,transparent_65%)]" />
-    
+      
+      {/* මේක තමයි කළු වෙන්න හේතුවුණේ. ඔරිජිනල් තිබ්බ විදිහටම කළු පාට අයින් කරලා හැදුවා */}
       <div className="hero-dim pointer-events-none absolute inset-0 z-[5] opacity-1" />
 
       <Hero3D contentRef={blockRef} />

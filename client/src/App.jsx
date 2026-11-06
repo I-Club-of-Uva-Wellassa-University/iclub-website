@@ -17,7 +17,7 @@ const App = () => {
 
   return (
     <div className="bg-night-950">
-      <Loader /> 
+      <Loader />
       <Navbar />
 
       <div className="relative">
