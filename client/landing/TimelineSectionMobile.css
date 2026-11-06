@@ -1,54 +1,72 @@
-/* Mobile Vertical Timeline Section */
 .iclub-tlm-wrapper {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(180deg, #b5e0f7 0%, #d8f0fc 100%);
+  background: linear-gradient(180deg, #b5e0f7 0%, #d8f0fc 50%, #cbeafb 100%);
   color: #0d436b;
-  padding: 88px 16px 70px 16px;
+  padding: 84px 16px 70px 16px;
   box-sizing: border-box;
   overflow-x: hidden;
   font-family: 'Geist Variable', 'Geist', system-ui, -apple-system, sans-serif;
   user-select: none;
 }
 
-/* Header Container */
+.iclub-tlm-wrapper *,
+.iclub-tlm-wrapper *::before,
+.iclub-tlm-wrapper *::after {
+  font-family: 'Geist Variable', 'Geist', system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+}
+
+/* Sticky Top Header & Animated Switcher Dock on Mobile */
+.iclub-tlm-sticky-hud {
+  position: sticky;
+  top: 76px;
+  z-index: 30;
+  background: rgba(203, 234, 251, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 12px 12px 14px;
+  border-radius: 22px;
+  margin-bottom: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 10px 26px rgba(13, 67, 107, 0.1);
+}
+
 .iclub-tlm-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 42px;
-  padding: 0 4px;
+  margin-bottom: 12px;
 }
 
 .iclub-tlm-pill-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.82);
-  padding: 5px 14px;
+  background: rgba(255, 255, 255, 0.86);
+  padding: 4px 12px;
   border-radius: 30px;
-  font-size: 0.68rem;
-  font-weight: 700;
+  font-size: 0.64rem;
+  font-weight: 800;
   letter-spacing: 1.8px;
   color: #0d436b;
-  margin-bottom: 8px;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 4px 12px rgba(13, 67, 107, 0.08);
+  margin-bottom: 6px;
 }
 
 .iclub-tlm-dot {
   width: 7px;
   height: 7px;
-  background: #1d70b8;
+  background: #00b4d8;
   border-radius: 50%;
 }
 
 .iclub-tlm-main-title {
-  font-size: 2.15rem;
+  position: relative;
+  font-size: 1.55rem;
   font-weight: 900;
-  letter-spacing: -1px;
-  line-height: 1.05;
+  letter-spacing: -0.8px;
+  line-height: 1.1;
   margin: 0;
   background: linear-gradient(90deg, #062b45 0%, #155582 50%, #3285b8 100%);
   -webkit-background-clip: text;
@@ -57,29 +75,97 @@
   color: transparent;
 }
 
+.iclub-tlm-main-title.tlm-glitch::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: #00b4d8;
+  -webkit-text-fill-color: #00b4d8;
+  transform: translate(-2px, 0);
+  opacity: 0.75;
+}
+
 .iclub-tlm-header-right {
   text-align: right;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 .iclub-tlm-outline-title {
   display: block;
-  font-size: 1.65rem;
+  font-size: 1.25rem;
   font-weight: 800;
   color: transparent;
-  -webkit-text-stroke: 1.5px #0d4a75;
+  -webkit-text-stroke: 1.3px #0d4a75;
   line-height: 1;
 }
 
 .iclub-tlm-solid-title {
   display: block;
-  font-size: 1.9rem;
+  font-size: 1.45rem;
   font-weight: 900;
   color: #2f74a3;
   line-height: 0.9;
 }
 
-/* Left Vertical Timeline Track */
+/* Mobile Sliding Pill Dock */
+.iclub-tlm-nav-dock {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.78);
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.95);
+}
+
+.iclub-tlm-nav-pill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #072a47, #0077b6);
+  transition: left 0.45s cubic-bezier(0.65, 0, 0.35, 1),
+    width 0.45s cubic-bezier(0.65, 0, 0.35, 1),
+    background 0.4s ease;
+  opacity: 0;
+  z-index: 1;
+}
+
+.iclub-tlm-nav-pill.ready {
+  opacity: 1;
+}
+
+.iclub-tlm-nav-pill.pill-mood-past {
+  background: linear-gradient(90deg, #1e293b, #475569);
+}
+
+.iclub-tlm-nav-pill.pill-mood-future {
+  background: linear-gradient(90deg, #1e1b4b, #4338ca);
+}
+
+.iclub-tlm-switch-btn {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: #1e496b;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: color 0.25s ease;
+  white-space: nowrap;
+}
+
+.iclub-tlm-switch-btn.active {
+  color: #ffffff;
+}
+
+/* Continuous Vertical Track */
 .iclub-tlm-track {
   position: relative;
   max-width: 460px;
@@ -87,7 +173,7 @@
   padding-left: 42px;
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 36px;
 }
 
 .iclub-tlm-line-base {
@@ -100,25 +186,67 @@
   border-radius: 6px;
 }
 
+/* Continuous Vertical Gradation Line */
 .iclub-tlm-line-glow {
   position: absolute;
   top: 0;
   left: 13px;
   width: 7px;
   height: 0%;
-  background: linear-gradient(180deg, #0d4a75 0%, #00b4d8 65%, #38bdf8 100%);
+  background: linear-gradient(
+    180deg,
+    #0d4a75 0%,
+    #00b4d8 28%,
+    #475569 55%,
+    #0284c7 78%,
+    #4f46e5 100%
+  );
   box-shadow: 0 0 16px rgba(0, 180, 216, 0.9), 0 0 30px rgba(56, 189, 248, 0.7);
   border-radius: 6px;
   z-index: 2;
 }
 
-/* Individual Milestone Item */
+.iclub-tlm-section-group {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+  scroll-margin-top: 210px;
+}
+
+.iclub-tlm-phase-divider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 8px 0 4px;
+}
+
+.iclub-tlm-phase-diamond {
+  position: absolute;
+  left: -31px;
+  width: 11px;
+  height: 11px;
+  background: #ffffff;
+  border: 2.5px solid #072a47;
+  transform: rotate(45deg);
+  z-index: 4;
+}
+
+.iclub-tlm-phase-tag {
+  display: inline-block;
+  background: rgba(7, 42, 71, 0.9);
+  color: #7cd4fc;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  padding: 5px 14px;
+  border-radius: 999px;
+}
+
 .iclub-tlm-item {
   position: relative;
   width: 100%;
 }
 
-/* Glowing Node Dot on Left Line */
 .iclub-tlm-node-dot {
   position: absolute;
   top: 18px;
@@ -131,10 +259,16 @@
   transform: translate(-50%, -50%) scale(0);
   box-shadow: 0 0 16px rgba(0, 180, 216, 0.95), 0 0 26px #ffffff;
   z-index: 5;
-  box-sizing: border-box;
 }
 
-/* White Branch Connecting Line to Card */
+.iclub-tlm-node-dot.dot-past {
+  background: #475569;
+}
+
+.iclub-tlm-node-dot.dot-future {
+  background: #3730a3;
+}
+
 .iclub-tlm-branch-line {
   position: absolute;
   top: 16px;
@@ -149,7 +283,6 @@
   z-index: 3;
 }
 
-/* Right-Side Content Container */
 .iclub-tlm-content {
   display: flex;
   flex-direction: column;
@@ -166,7 +299,7 @@
 }
 
 .iclub-tlm-year {
-  font-size: 2rem;
+  font-size: 1.9rem;
   font-weight: 900;
   color: #072a47;
   line-height: 1;
@@ -185,7 +318,6 @@
   border-radius: 12px;
 }
 
-/* Media Image Card */
 .iclub-tlm-media-card {
   position: relative;
   width: 100%;
@@ -222,11 +354,9 @@
   border-radius: 16px;
   border: 3.5px solid #ffffff;
   box-shadow: 0 14px 30px rgba(13, 67, 107, 0.26);
-  box-sizing: border-box;
   display: block;
 }
 
-/* Dark Floating Caption Pill Over Image Bottom */
 .iclub-tlm-card-info {
   position: absolute;
   bottom: -16px;
@@ -260,7 +390,6 @@
   color: #f1f5f9;
 }
 
-/* Vertical Connector Line Between Photo & Description Box */
 .iclub-tlm-desc-connector {
   width: 3px;
   height: 24px;
@@ -272,18 +401,15 @@
   opacity: 0;
 }
 
-/* Description Card Box (Matches Desktop Style) */
 .iclub-tlm-desc-box {
   width: 100%;
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   border: 2px solid rgba(255, 255, 255, 0.95);
   border-left: 5px solid #072a47;
   border-radius: 16px;
   padding: 14px 16px;
   box-shadow: 0 12px 26px rgba(13, 67, 107, 0.14);
-  box-sizing: border-box;
   opacity: 0;
   transform: translateY(12px) scale(0.95);
 }
@@ -297,7 +423,6 @@
   padding: 4px 12px;
   border-radius: 20px;
   margin-bottom: 8px;
-  box-shadow: 0 4px 10px rgba(7, 42, 71, 0.2);
 }
 
 .iclub-tlm-desc-bullet {
@@ -326,7 +451,6 @@
   font-weight: 800;
 }
 
-/* Bottom Scroll to Contact Button */
 .iclub-tlm-end-node {
   position: relative;
   display: flex;

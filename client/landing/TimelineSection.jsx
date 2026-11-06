@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import TimelineSectionMobile from "./TimelineSectionMobile";
@@ -6,125 +6,293 @@ import "./TimelineSection.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const TIMELINE_DATA = [
+export const TIMELINE_SECTIONS = [
   {
-    id: 1,
-    year: "2018",
-    type: "up",
-    positionX: 590,
-    title: "iClub Inauguration",
-    subtitle: "The Beginning of Our Journey",
-    highlight: "Official Club Launch",
-    description:
-      "We started iClub to bring students together, share tech ideas, and build a strong creative community inside the university.",
-    image: "/timeline/1.jpg",
+    key: "ongoing",
+    buttonLabel: "Ongoing Line",
+    badge: "ACTIVE CORE TRACK",
+    title: "Ongoing Projects",
+    items: [
+      {
+        id: "ong-1",
+        year: "2025",
+        type: "down",
+        localIdx: 1,
+        positionX: 600,
+        title: "Tech Fiesta 2025",
+        subtitle: "Flagship Innovation Summit",
+        highlight: "University-Wide Expo",
+        description:
+          "A full week of industry guest talks, live hardware exhibitions, and collaborative software showcases at UWU.",
+        image: "/timeline/5.jpg",
+      },
+      {
+        id: "ong-2",
+        year: "2025",
+        type: "down",
+        localIdx: 2,
+        positionX: 1350,
+        title: "HackDay 24-Hour",
+        subtitle: "Build for Sri Lanka",
+        highlight: "Active Hackathon",
+        description:
+          "Undergraduates team up for a non-stop 24-hour product engineering marathon mentored by industry engineers.",
+        image: "/timeline/3.jpg",
+      },
+      {
+        id: "ong-3",
+        year: "2026",
+        type: "down",
+        localIdx: 3,
+        positionX: 2100,
+        title: "iClub Digital Portal",
+        subtitle: "Open-Source Ecosystem",
+        highlight: "Platform Release",
+        description:
+          "Developing a unified student resource hub, event registration system, and project repository.",
+        image: "/timeline/2.jpg",
+      },
+      {
+        id: "ong-4",
+        year: "2026",
+        type: "down",
+        localIdx: 4,
+        positionX: 2850,
+        title: "Industry Bridge",
+        subtitle: "Career & Mentorship",
+        highlight: "Undergraduate Track",
+        description:
+          "Connecting final-year and second-year undergraduates directly with software architects and tech leads.",
+        image: "/timeline/4.jpg",
+      },
+    ],
   },
   {
-    id: 2,
-    year: "2019",
-    type: "down",
-    positionX: 1200,
-    title: "Tech Fiesta 2023",
-    subtitle: "Innovation & Workshops",
-    highlight: "Hands-On Learning",
-    description:
-      "A full week of practical coding sessions, industry guest talks, and teamwork that helped members learn modern software skills.",
-    image: "/timeline/2.jpg",
+    key: "past",
+    buttonLabel: "Explore Past",
+    badge: "COMPLETED ARCHIVE",
+    title: "Past Projects Archive",
+    items: [
+      {
+        id: "past-1",
+        year: "2018",
+        type: "down",
+        localIdx: 1,
+        positionX: 3950,
+        title: "iClub Inauguration",
+        subtitle: "The Beginning of Our Journey",
+        highlight: "Official Club Launch",
+        description:
+          "We started iClub to bring students together, share tech ideas, and build a strong creative community inside the university.",
+        image: "/timeline/1.jpg",
+      },
+      {
+        id: "past-2",
+        year: "2019",
+        type: "down",
+        localIdx: 2,
+        positionX: 4700,
+        title: "CodeSprint 1.0",
+        subtitle: "Algorithmic Challenge",
+        highlight: "150+ Coders",
+        description:
+          "First inter-batch competitive programming contest focused on data structures and problem-solving.",
+        image: "/timeline/2.jpg",
+      },
+      {
+        id: "past-3",
+        year: "2021",
+        type: "down",
+        localIdx: 3,
+        positionX: 5450,
+        title: "WebDev Bootcamp",
+        subtitle: "Full-Stack Series",
+        highlight: "Hands-On Sessions",
+        description:
+          "Intensive weekend workshops covering modern React, Node.js, and cloud deployment fundamentals.",
+        image: "/timeline/3.jpg",
+      },
+      {
+        id: "past-4",
+        year: "2023",
+        type: "down",
+        localIdx: 4,
+        positionX: 6200,
+        title: "Annual AGM & Awards",
+        subtitle: "Leadership Transition",
+        highlight: "Celebrating Growth",
+        description:
+          "Recognized top student contributors and inducted the new executive committee for the upcoming term.",
+        image: "/timeline/4.jpg",
+      },
+    ],
   },
   {
-    id: 3,
-    year: "2020",
-    type: "up",
-    positionX: 1850,
-    title: "HackDay & Cultural Night",
-    subtitle: "Unleashing Talent",
-    highlight: "24-Hour Hackathon",
-    description:
-      "Students built smart solutions during a 24-hour coding challenge, followed by an evening of music and cultural performances.",
-    image: "/timeline/3.jpg",
-  },
-  {
-    id: 4,
-    year: "2021",
-    type: "down",
-    positionX: 2350,
-    title: "Annual General Meeting",
-    subtitle: "AGM of iClub",
-    highlight: "Celebrating Growth",
-    description:
-      "Members gathered to review our biggest achievements of the year, reward top contributors, and plan upcoming tech projects.",
-    image: "/timeline/4.jpg",
-  },
-  {
-    id: 5,
-    year: "2022",
-    type: "up",
-    positionX: 2750,
-    title: "New Executive Board",
-    subtitle: "Stepping into the Future",
-    highlight: "Next Generation Leaders",
-    description:
-      "A new team of student leaders took charge with fresh ideas to guide iClub toward bigger events and collaborations.",
-    image: "/timeline/5.jpg",
-  },
-  {
-    id: 6,
-    year: "2023",
-    type: "down",
-    positionX: 3150,
-    title: "New Executive Board",
-    subtitle: "Stepping into the Future",
-    highlight: "Next Generation Leaders",
-    description:
-      "A new team of student leaders took charge with fresh ideas to guide iClub toward bigger events and collaborations.",
-    image: "/timeline/4.jpg",
-  },
-  {
-    id: 7,
-    year: "2024",
-    type: "up",
-    positionX: 3550,
-    title: "New Executive Board",
-    subtitle: "Stepping into the Future",
-    highlight: "Next Generation Leaders",
-    description:
-      "A new team of student leaders took charge with fresh ideas to guide iClub toward bigger events and collaborations.",
-    image: "/timeline/3.jpg",
-  },
-  {
-    id: 8,
-    year: "2025",
-    type: "down",
-    positionX: 4150,
-    title: "New Executive Board",
-    subtitle: "Stepping into the Future",
-    highlight: "Next Generation Leaders",
-    description:
-      "A new team of student leaders took charge with fresh ideas to guide iClub toward bigger events and collaborations.",
-    image: "/timeline/2.jpg",
+    key: "future",
+    buttonLabel: "Explore Future",
+    badge: "UPCOMING ROADMAP",
+    title: "Future Projects Roadmap",
+    items: [
+      {
+        id: "fut-1",
+        year: "2026",
+        type: "down",
+        localIdx: 1,
+        positionX: 7300,
+        title: "AI & Robotics Lab",
+        subtitle: "Next-Gen Research",
+        highlight: "Smart Systems",
+        description:
+          "Launching dedicated student study groups for embedded systems, computer vision, and applied LLMs.",
+        image: "/timeline/1.jpg",
+      },
+      {
+        id: "fut-2",
+        year: "2027",
+        type: "down",
+        localIdx: 2,
+        positionX: 8050,
+        title: "Inter-Uni CTF",
+        subtitle: "Cybersecurity Arena",
+        highlight: "National Capture Flag",
+        description:
+          "Hosting an island-wide ethical hacking and network defense tournament for university teams.",
+        image: "/timeline/4.jpg",
+      },
+      {
+        id: "fut-3",
+        year: "2027",
+        type: "down",
+        localIdx: 3,
+        positionX: 8800,
+        title: "Cloud Native Day",
+        subtitle: "DevOps & Architecture",
+        highlight: "AWS & Kubernetes",
+        description:
+          "Hands-on cloud infrastructure labs teaching container orchestration and scalable microservice design.",
+        image: "/timeline/3.jpg",
+      },
+      {
+        id: "fut-4",
+        year: "2027",
+        type: "down",
+        localIdx: 4,
+        positionX: 9550,
+        title: "iClub Incubator",
+        subtitle: "Student Startups",
+        highlight: "Seed Pitch Night",
+        description:
+          "Supporting undergraduate founder teams to turn final-year research projects into commercial SaaS products.",
+        image: "/timeline/2.jpg",
+      },
+    ],
   },
 ];
 
-const LINE_MARKERS = [
-  { pos: 320, label: "START" },
-  { pos: 1375, label: "PHASE 01" },
-  { pos: 2105, label: "PHASE 02" },
-  { pos: 3075, label: "PHASE 03" },
-  { pos: 3925, label: "PHASE 04" },
+const ALL_MILESTONES = TIMELINE_SECTIONS.flatMap((section) =>
+  section.items.map((item) => ({
+    ...item,
+    sectionKey: section.key,
+    sectionTitle: section.title,
+    sectionTotal: section.items.length,
+  }))
+);
+
+const TRANSITION_GATES = [
+  { pos: 300, label: "ONGOING START", sectionKey: "ongoing" },
+  { pos: 3450, label: "EXPLORE PAST", sectionKey: "past" },
+  { pos: 6800, label: "EXPLORE FUTURE", sectionKey: "future" },
 ];
 
-const LOOP_START_X = 4650;
+const LOOP_START_X = 10400;
+const GLITCH_CHARS = "!<>-_\\/[]{}=+*^?#01";
 
 export default function TimelineSection() {
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
-  const leftHeaderRef = useRef(null);
   const mainLineRef = useRef(null);
   const bottomBarRef = useRef(null);
   const endLoopPathRef = useRef(null);
   const endLoopGlowRef = useRef(null);
   const endArrowRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(1);
+  const stInstanceRef = useRef(null);
+  const titleElRef = useRef(null);
+  const switchBtnRefs = useRef({});
+
+  const [activeTrack, setActiveTrack] = useState("ongoing");
+  const [activeLocalIndex, setActiveLocalIndex] = useState(1);
+  const [displayTitle, setDisplayTitle] = useState("Ongoing Projects");
+  const [isGlitching, setIsGlitching] = useState(false);
+  const [navPill, setNavPill] = useState({
+    left: 0,
+    width: 0,
+    ready: false,
+  });
+
+  const activeTrackRef = useRef("ongoing");
+
+  const updateNavPill = () => {
+    const btn = switchBtnRefs.current[activeTrack];
+    if (btn) {
+      setNavPill({
+        left: btn.offsetLeft,
+        width: btn.offsetWidth,
+        ready: true,
+      });
+    }
+  };
+
+  useLayoutEffect(() => {
+    updateNavPill();
+  }, [activeTrack]);
+
+  useEffect(() => {
+    window.addEventListener("resize", updateNavPill);
+    return () => window.removeEventListener("resize", updateNavPill);
+  }, [activeTrack]);
+
+  useEffect(() => {
+    const sectionObj = TIMELINE_SECTIONS.find((s) => s.key === activeTrack);
+    const targetText = sectionObj ? sectionObj.title : "Ongoing Projects";
+
+    setIsGlitching(true);
+    const state = { p: 0 };
+
+    const tween = gsap.to(state, {
+      p: 1,
+      duration: 0.52,
+      ease: "power2.out",
+      onUpdate: () => {
+        const revealedCount = Math.floor(state.p * targetText.length);
+        const scrambled =
+          targetText.slice(0, revealedCount) +
+          targetText
+            .slice(revealedCount)
+            .split("")
+            .map((ch) =>
+              ch === " "
+                ? " "
+                : GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)]
+            )
+            .join("");
+        setDisplayTitle(scrambled);
+      },
+      onComplete: () => {
+        setDisplayTitle(targetText);
+        setIsGlitching(false);
+      },
+    });
+
+    if (titleElRef.current) {
+      gsap.fromTo(
+        titleElRef.current,
+        { x: -8, skewX: -8 },
+        { x: 0, skewX: 0, duration: 0.42, ease: "back.out(2)" }
+      );
+    }
+
+    return () => tween.kill();
+  }, [activeTrack]);
 
   useEffect(() => {
     const mm = gsap.matchMedia();
@@ -133,8 +301,10 @@ export default function TimelineSection() {
       "(min-width: 769px)",
       () => {
         const track = trackRef.current;
+        if (!track) return;
+
         const getMaxTranslateX = () =>
-          Math.max(0, LOOP_START_X + 340 - window.innerWidth);
+          Math.max(0, LOOP_START_X + 420 - window.innerWidth);
 
         const svgPaths = gsap.utils.toArray(".iclub-tl-svg-draw");
         svgPaths.forEach((path) => {
@@ -222,7 +392,8 @@ export default function TimelineSection() {
 
           return {
             el: ms,
-            posX: TIMELINE_DATA[index].positionX,
+            data: ALL_MILESTONES[index],
+            posX: ALL_MILESTONES[index].positionX,
             popupTl,
             isVisible: false,
           };
@@ -232,35 +403,52 @@ export default function TimelineSection() {
           scrollTrigger: {
             trigger: sectionRef.current,
             pin: true,
-            scrub: 0.7,
-            end: () => `+=${getMaxTranslateX() + 900}`,
+            scrub: 0.75,
+            end: () => `+=${getMaxTranslateX() + 1300}`,
             invalidateOnRefresh: true,
             onUpdate: (self) => {
+              stInstanceRef.current = self;
               const p = self.progress;
 
               if (bottomBarRef.current) {
                 bottomBarRef.current.style.width = `${Math.min(100, p * 100)}%`;
               }
 
-              if (leftHeaderRef.current) {
-                const fadeProg = Math.min(1, p * 4.5);
-                gsap.set(leftHeaderRef.current, {
-                  x: -fadeProg * 180,
-                  opacity: Math.max(0, 1 - fadeProg * 1.15),
-                });
-              }
+              const horizPhase = Math.min(1, p / 0.91);
+              const maxTx = getMaxTranslateX();
+              const currentTrackX = -horizPhase * maxTx;
 
-              const horizPhase = Math.min(1, p / 0.82);
-              const currentLineX = 180 + horizPhase * (LOOP_START_X - 180);
+              const drawLeadX = Math.min(
+                window.innerWidth * 0.72,
+                260 + horizPhase * (window.innerWidth * 0.48)
+              );
+              const currentLineX = Math.min(
+                LOOP_START_X,
+                Math.max(200, -currentTrackX + drawLeadX)
+              );
 
               if (mainLineRef.current) {
                 mainLineRef.current.style.width = `${currentLineX}px`;
               }
 
-              let currentActive = 1;
-              milestoneStates.forEach((item, idx) => {
-                if (currentLineX >= item.posX - 8) {
-                  currentActive = idx + 1;
+              let detectedSection = "ongoing";
+              if (currentLineX >= 6800) {
+                detectedSection = "future";
+              } else if (currentLineX >= 3450) {
+                detectedSection = "past";
+              }
+
+              if (detectedSection !== activeTrackRef.current) {
+                activeTrackRef.current = detectedSection;
+                setActiveTrack(detectedSection);
+              }
+
+              let currentLocalIdx = 1;
+              milestoneStates.forEach((item) => {
+                if (currentLineX >= item.posX - 10) {
+                  if (item.data.sectionKey === detectedSection) {
+                    currentLocalIdx = item.data.localIdx;
+                  }
                   if (!item.isVisible) {
                     item.isVisible = true;
                     item.popupTl.play();
@@ -272,32 +460,37 @@ export default function TimelineSection() {
                   }
                 }
               });
-              setActiveIndex(currentActive);
+              setActiveLocalIndex(currentLocalIdx);
 
-              const currentTrackX = gsap.getProperty(track, "x") || 0;
               milestoneStates.forEach((item) => {
-                const screenX = item.posX + Number(currentTrackX);
-                if (screenX < 140) {
-                  const fadeOutRatio = Math.max(0, (screenX + 80) / 220);
+                const screenX = item.posX + currentTrackX;
+                if (screenX < 150) {
+                  const fadeOutRatio = Math.max(0, (screenX + 120) / 270);
                   gsap.set(item.el, {
                     opacity: fadeOutRatio,
-                    filter: `blur(${(1 - fadeOutRatio) * 4}px)`,
+                    x: -(1 - fadeOutRatio) * 45,
+                    filter: `blur(${((1 - fadeOutRatio) * 4.5).toFixed(2)}px)`,
                   });
                 } else {
-                  gsap.set(item.el, { opacity: 1, filter: "blur(0px)" });
+                  gsap.set(item.el, {
+                    opacity: 1,
+                    x: 0,
+                    filter: "blur(0px)",
+                  });
                 }
               });
 
-              if (p > 0.82 && loopLen > 0) {
-                const loopProgress = Math.min(1, (p - 0.82) / 0.18);
+              if (p > 0.91 && loopLen > 0) {
+                const loopProgress = Math.min(1, (p - 0.91) / 0.09);
                 const drawOffset = loopLen * (1 - loopProgress);
                 gsap.set([endLoopPathRef.current, endLoopGlowRef.current], {
                   strokeDashoffset: drawOffset,
                 });
                 if (endArrowRef.current) {
                   gsap.set(endArrowRef.current, {
-                    opacity: loopProgress > 0.65 ? 1 : 0,
+                    opacity: loopProgress > 0.55 ? 1 : 0,
                     y: loopProgress * 20,
+                    pointerEvents: loopProgress > 0.55 ? "auto" : "none",
                   });
                 }
               } else if (loopLen > 0) {
@@ -305,7 +498,11 @@ export default function TimelineSection() {
                   strokeDashoffset: loopLen,
                 });
                 if (endArrowRef.current) {
-                  gsap.set(endArrowRef.current, { opacity: 0, y: 0 });
+                  gsap.set(endArrowRef.current, {
+                    opacity: 0,
+                    y: 0,
+                    pointerEvents: "none",
+                  });
                 }
               }
             },
@@ -316,12 +513,12 @@ export default function TimelineSection() {
           .to(track, {
             x: () => -getMaxTranslateX(),
             ease: "none",
-            duration: 0.82,
+            duration: 0.91,
           })
           .to(track, {
             x: () => -getMaxTranslateX(),
             ease: "none",
-            duration: 0.18,
+            duration: 0.09,
           });
       },
       sectionRef
@@ -329,6 +526,34 @@ export default function TimelineSection() {
 
     return () => mm.revert();
   }, []);
+
+  const handleSwitchSection = (targetKey) => {
+    const st = stInstanceRef.current;
+    if (!st) {
+      setActiveTrack(targetKey);
+      return;
+    }
+
+    const maxTx = Math.max(0, LOOP_START_X + 420 - window.innerWidth);
+    let targetWorldX = 0;
+
+    if (targetKey === "ongoing") {
+      targetWorldX = 0;
+    } else if (targetKey === "past") {
+      targetWorldX = Math.max(0, 3950 - window.innerWidth * 0.32);
+    } else if (targetKey === "future") {
+      targetWorldX = Math.max(0, 7300 - window.innerWidth * 0.32);
+    }
+
+    const horizRatio = maxTx > 0 ? Math.min(1, targetWorldX / maxTx) : 0;
+    const totalProgress = horizRatio * 0.91;
+    const targetScrollY = st.start + totalProgress * (st.end - st.start);
+
+    window.scrollTo({
+      top: targetScrollY,
+      behavior: "smooth",
+    });
+  };
 
   const handleZoneEnter = (e) => {
     const zone = e.currentTarget;
@@ -341,9 +566,9 @@ export default function TimelineSection() {
 
     if (cardInner) {
       gsap.to(cardInner, {
-        scale: 1.22,
+        scale: 1.1,
         z: 90,
-        y: -6,
+        y: -2,
         duration: 0.4,
         ease: "power3.out",
         overwrite: "auto",
@@ -460,15 +685,32 @@ export default function TimelineSection() {
     }
   };
 
+  const currentSectionObj =
+    TIMELINE_SECTIONS.find((s) => s.key === activeTrack) ||
+    TIMELINE_SECTIONS[0];
+
   return (
     <div id="timeline">
       <div className="iclub-tl-desktop-only">
-        <section className="iclub-tl-wrapper" ref={sectionRef}>
-          <div className="iclub-tl-header-left" ref={leftHeaderRef}>
+        <section
+          className={`iclub-tl-wrapper section-mood-${activeTrack}`}
+          ref={sectionRef}
+        >
+          <div className="iclub-tl-header-left">
             <div className="iclub-tl-pill-badge">
-              <span className="iclub-tl-dot"></span> TIMELINE
+              <span className={`iclub-tl-dot dot-mood-${activeTrack}`}></span>
+              <span>TIMELINE • {currentSectionObj.badge}</span>
             </div>
-            <h2 className="iclub-tl-main-title">Milestones</h2>
+
+            <h2
+              ref={titleElRef}
+              className={`iclub-tl-main-title ${
+                isGlitching ? "iclub-tl-glitch-active" : ""
+              }`}
+              data-text={displayTitle}
+            >
+              {displayTitle}
+            </h2>
           </div>
 
           <div className="iclub-tl-bg-header-right">
@@ -481,9 +723,13 @@ export default function TimelineSection() {
               className="iclub-tl-line-base"
               style={{ width: `${LOOP_START_X}px` }}
             ></div>
-            <div className="iclub-tl-line-glow" ref={mainLineRef}></div>
+            <div
+              className="iclub-tl-line-glow"
+              ref={mainLineRef}
+              style={{ backgroundSize: `${LOOP_START_X}px 100%` }}
+            ></div>
 
-            {LINE_MARKERS.map((mk, idx) => (
+            {TRANSITION_GATES.map((mk, idx) => (
               <div
                 key={idx}
                 className="iclub-tl-line-marker"
@@ -496,13 +742,15 @@ export default function TimelineSection() {
               </div>
             ))}
 
-            {TIMELINE_DATA.map((item) => (
+            {ALL_MILESTONES.map((item) => (
               <div
                 key={item.id}
-                className={`iclub-tl-milestone iclub-tl-${item.type}`}
+                className={`iclub-tl-milestone iclub-tl-${item.type} ms-theme-${item.sectionKey}`}
                 style={{ left: `${item.positionX}px` }}
               >
-                <div className="iclub-tl-node-dot"></div>
+                <div
+                  className={`iclub-tl-node-dot dot-${item.sectionKey}`}
+                ></div>
 
                 {item.type === "up" ? (
                   <svg
@@ -592,6 +840,12 @@ export default function TimelineSection() {
               className="iclub-tl-end-loop-container"
               style={{ left: `${LOOP_START_X}px` }}
             >
+
+              <img
+                src="/Logo/ilogo.png"
+                alt="iClub Logo"
+                className="iclub-tl-gap-logo"
+              />
               <svg
                 className="iclub-tl-end-loop-svg"
                 width="340"
@@ -628,13 +882,43 @@ export default function TimelineSection() {
           <div className="iclub-tl-bottom-hud">
             <div className="iclub-tl-hud-row">
               <div className="iclub-tl-counter">
-                <strong>{String(activeIndex).padStart(2, "0")}</strong>
-                <span> / {String(TIMELINE_DATA.length).padStart(2, "0")}</span>
+                <strong>{String(activeLocalIndex).padStart(2, "0")}</strong>
+                <span>
+                  {" "}
+                  / {String(currentSectionObj.items.length).padStart(2, "0")}
+                </span>
               </div>
+
+              <div className="iclub-tl-nav-dock">
+                <span
+                  className={`iclub-tl-nav-pill pill-mood-${activeTrack} ${
+                    navPill.ready ? "ready" : ""
+                  }`}
+                  style={{
+                    left: `${navPill.left}px`,
+                    width: `${navPill.width}px`,
+                  }}
+                />
+                {TIMELINE_SECTIONS.map((sec) => (
+                  <button
+                    key={sec.key}
+                    ref={(el) => (switchBtnRefs.current[sec.key] = el)}
+                    type="button"
+                    className={`iclub-tl-switch-btn ${
+                      activeTrack === sec.key ? "active" : ""
+                    }`}
+                    onClick={() => handleSwitchSection(sec.key)}
+                  >
+                    {sec.buttonLabel}
+                  </button>
+                ))}
+              </div>
+
               <div className="iclub-tl-scroll-label">
                 SCROLL <br /> <span>&#8964;</span>
               </div>
             </div>
+
             <div className="iclub-tl-progress-track">
               <div className="iclub-tl-progress-fill" ref={bottomBarRef}></div>
             </div>
@@ -643,7 +927,7 @@ export default function TimelineSection() {
       </div>
 
       <div className="iclub-tl-mobile-only">
-        <TimelineSectionMobile data={TIMELINE_DATA} />
+        <TimelineSectionMobile sections={TIMELINE_SECTIONS} />
       </div>
     </div>
   );
