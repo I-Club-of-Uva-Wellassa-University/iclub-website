@@ -202,7 +202,8 @@ const SOCIAL_CHANNELS = [
     name: "Facebook",
     handle: "@iClubUWU",
     badge: "Event Updates & Albums",
-    description: "Follow our official page for event photo albums, announcements, and live coverage.",
+    description:
+      "Follow our official page for event photo albums, announcements, and live coverage.",
     url: "https://web.facebook.com/profile.php?id=61590906690139",
     accent: "#1877F2",
     icon: (
@@ -216,7 +217,8 @@ const SOCIAL_CHANNELS = [
     name: "LinkedIn",
     handle: "iClub - Uva Wellassa University",
     badge: "Professional Network",
-    description: "Connect with our alumni network, industry partners, and career mentorship programs.",
+    description:
+      "Connect with our alumni network, industry partners, and career mentorship programs.",
     url: "https://www.linkedin.com/company/i-club-of-uva-wellassa-university/",
     accent: "#0A66C2",
     icon: (
@@ -225,12 +227,13 @@ const SOCIAL_CHANNELS = [
       </svg>
     ),
   },
-{
+  {
     id: "youtube",
     name: "YouTube",
     handle: "@iClubUWU",
     badge: "Tech Talks & Sessions",
-    description: "Watch recorded tech workshops, hackathon highlights, and tutorial sessions on our official channel.",
+    description:
+      "Watch recorded tech workshops, hackathon highlights, and tutorial sessions on our official channel.",
     url: "https://www.youtube.com/@iclubof_uvawellassauniversity",
     accent: "#FF0000",
     icon: (
@@ -239,12 +242,13 @@ const SOCIAL_CHANNELS = [
       </svg>
     ),
   },
-{
+  {
     id: "instagram",
     name: "Instagram",
     handle: "@iclub.uwu",
     badge: "Stories & Reels",
-    description: "Catch behind-the-scenes moments, hackathon reels, and campus tech culture.",
+    description:
+      "Catch behind-the-scenes moments, hackathon reels, and campus tech culture.",
     url: "https://www.instagram.com/iclubuwu/",
     accent: "#E1306C",
     icon: (
@@ -257,6 +261,7 @@ const SOCIAL_CHANNELS = [
 
 export default function ContactSection() {
   const sectionRef = useRef(null);
+  const canvasRef = useRef(null);
   const historyContentRef = useRef(null);
   const historyGridRef = useRef(null);
 
@@ -265,6 +270,249 @@ export default function ContactSection() {
   const [activeYear, setActiveYear] = useState("2024 / 2025");
 
   const yearKeys = Object.keys(PAST_BOARDS);
+
+  // Smooth Central Energy Nebula + Reduced Drifting Bubbles/Embers Animation
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const section = sectionRef.current;
+    if (!canvas || !section) return;
+
+    const ctx = canvas.getContext("2d", { alpha: true });
+    let animationFrameId = null;
+    let isVisible = false;
+    let width = 0;
+    let height = 0;
+    let time = 0;
+
+    // Pre-render offscreen sprites once so low-end GPUs never compute heavy gradients per frame
+    const createGlowSprite = (size, stops) => {
+      const off = document.createElement("canvas");
+      off.width = size;
+      off.height = size;
+      const oCtx = off.getContext("2d");
+      const half = size / 2;
+      const grad = oCtx.createRadialGradient(half, half, 0, half, half, half);
+      stops.forEach(([pos, color]) => grad.addColorStop(pos, color));
+      oCtx.fillStyle = grad;
+      oCtx.fillRect(0, 0, size, size);
+      return off;
+    };
+
+    const cyanNebulaSprite = createGlowSprite(320, [
+      [0, "rgba(0, 180, 216, 0.34)"],
+      [0.35, "rgba(56, 189, 248, 0.16)"],
+      [0.7, "rgba(13, 74, 117, 0.05)"],
+      [1, "rgba(13, 74, 117, 0)"],
+    ]);
+
+    const corePulseSprite = createGlowSprite(260, [
+      [0, "rgba(255, 255, 255, 0.55)"],
+      [0.25, "rgba(0, 212, 255, 0.32)"],
+      [0.6, "rgba(0, 119, 182, 0.12)"],
+      [1, "rgba(0, 119, 182, 0)"],
+    ]);
+
+    const bubbleSpriteCyan = createGlowSprite(64, [
+      [0, "rgba(255, 255, 255, 0.95)"],
+      [0.28, "rgba(0, 180, 216, 0.75)"],
+      [0.65, "rgba(0, 150, 199, 0.22)"],
+      [1, "rgba(0, 150, 199, 0)"],
+    ]);
+
+    const bubbleSpriteNavy = createGlowSprite(64, [
+      [0, "rgba(124, 212, 252, 0.9)"],
+      [0.35, "rgba(13, 74, 117, 0.55)"],
+      [0.7, "rgba(7, 42, 71, 0.15)"],
+      [1, "rgba(7, 42, 71, 0)"],
+    ]);
+
+    let nebulaClouds = [];
+    let energyRings = [];
+    let embers = [];
+
+    const initScene = () => {
+      width = section.offsetWidth;
+      height = section.offsetHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const isMobile = width < 768;
+
+      // Central swirling nebula nodes
+      nebulaClouds = Array.from({ length: 7 }, (_, i) => ({
+        angle: (i / 7) * Math.PI * 2,
+        orbitRadius: (isMobile ? 45 : 85) + (i % 3) * 35,
+        speed: (i % 2 === 0 ? 1 : -1) * (0.004 + i * 0.0008),
+        scaleBase: (isMobile ? 1.1 : 1.65) + (i % 3) * 0.35,
+        phase: i * 1.1,
+        isCore: i < 3,
+      }));
+
+      // Organic pulsing plasma veins/rings in the center (like the fire shockwaves in the video)
+      energyRings = Array.from({ length: 3 }, (_, i) => ({
+        progress: i * 0.33,
+        speed: 0.0032 + i * 0.0005,
+        seed: i * 2.4,
+      }));
+
+      // Reduced side bubbles/embers (kept minimal & clean as requested)
+      const emberCount = isMobile ? 12 : 22;
+      embers = Array.from({ length: emberCount }, (_, i) => {
+        const fromLeft = i % 2 === 0;
+        return {
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (fromLeft ? 1 : -1) * (0.35 + Math.random() * 0.65),
+          vy: -0.25 - Math.random() * 0.55,
+          size: 10 + Math.random() * 20,
+          alpha: 0.35 + Math.random() * 0.5,
+          phase: Math.random() * Math.PI * 2,
+          stretch: 1.35 + Math.random() * 0.9,
+          isCyan: i % 3 !== 0,
+        };
+      });
+    };
+
+    const drawPlasmaRing = (cx, cy, ring, t) => {
+      const p = ring.progress;
+      const maxR = Math.min(width, height) * 0.34;
+      const baseR = 28 + p * maxR;
+      const alpha = Math.sin(p * Math.PI) * 0.38;
+
+      if (alpha <= 0.01) return;
+
+      ctx.save();
+      ctx.beginPath();
+      const steps = 36;
+      for (let s = 0; s <= steps; s++) {
+        const theta = (s / steps) * Math.PI * 2;
+        const wave1 = Math.sin(theta * 4 + t * 2.2 + ring.seed) * (14 * p);
+        const wave2 = Math.cos(theta * 7 - t * 1.6 + ring.seed) * (9 * p);
+        const r = baseR + wave1 + wave2;
+        const px = cx + Math.cos(theta) * r * 1.25;
+        const py = cy + Math.sin(theta) * r * 0.85;
+        if (s === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+
+      ctx.strokeStyle = `rgba(0, 180, 216, ${alpha.toFixed(3)})`;
+      ctx.lineWidth = 2.2 * (1 - p * 0.5);
+      ctx.stroke();
+
+      ctx.strokeStyle = `rgba(255, 255, 255, ${(alpha * 0.65).toFixed(3)})`;
+      ctx.lineWidth = 0.9;
+      ctx.stroke();
+      ctx.restore();
+    };
+
+    const render = () => {
+      if (!isVisible) return;
+      time += 0.016;
+
+      ctx.clearRect(0, 0, width, height);
+
+      const centerX = width * 0.5;
+      const centerY = height * 0.46;
+
+      // 1. Draw soft central nebula energy clouds
+      for (let i = 0; i < nebulaClouds.length; i++) {
+        const c = nebulaClouds[i];
+        c.angle += c.speed;
+        const pulse = 1 + Math.sin(time * 1.5 + c.phase) * 0.18;
+        const x = centerX + Math.cos(c.angle) * c.orbitRadius * 1.35;
+        const y =
+          centerY +
+          Math.sin(c.angle * 1.2) * c.orbitRadius * 0.75 +
+          Math.sin(time + i) * 18;
+
+        const sprite = c.isCore ? corePulseSprite : cyanNebulaSprite;
+        const drawSize = 280 * c.scaleBase * pulse;
+
+        ctx.globalAlpha = c.isCore ? 0.65 : 0.55;
+        ctx.drawImage(
+          sprite,
+          x - drawSize * 0.5,
+          y - drawSize * 0.5,
+          drawSize,
+          drawSize
+        );
+      }
+
+      // 2. Draw central pulsing plasma energy filaments (matching video's central burst)
+      ctx.globalAlpha = 1;
+      for (let i = 0; i < energyRings.length; i++) {
+        const ring = energyRings[i];
+        ring.progress += ring.speed;
+        if (ring.progress >= 1) ring.progress = 0;
+        drawPlasmaRing(centerX, centerY, ring, time);
+      }
+
+      // 3. Draw reduced drifting side bubbles/embers with subtle motion streak
+      for (let i = 0; i < embers.length; i++) {
+        const b = embers[i];
+        b.x += b.vx + Math.sin(time * 1.2 + b.phase) * 0.18;
+        b.y += b.vy;
+
+        // Wrap smoothly around screen edges
+        if (b.x < -40) b.x = width + 30;
+        if (b.x > width + 40) b.x = -30;
+        if (b.y < -40) b.y = height + 30;
+        if (b.y > height + 40) b.y = -30;
+
+        const flicker = 0.75 + Math.sin(time * 2.4 + b.phase) * 0.25;
+        ctx.save();
+        ctx.translate(b.x, b.y);
+        ctx.rotate(Math.atan2(b.vy, b.vx));
+        ctx.scale(b.stretch, 1);
+        ctx.globalAlpha = b.alpha * flicker;
+
+        const sprite = b.isCyan ? bubbleSpriteCyan : bubbleSpriteNavy;
+        ctx.drawImage(sprite, -b.size * 0.5, -b.size * 0.5, b.size, b.size);
+        ctx.restore();
+      }
+
+      ctx.globalAlpha = 1;
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    initScene();
+
+    // Pause animation when ContactSection is not visible on screen
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = requestAnimationFrame(render);
+        } else {
+          cancelAnimationFrame(animationFrameId);
+        }
+      },
+      { threshold: 0.02 }
+    );
+
+    observer.observe(section);
+
+    let resizeTimer;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        initScene();
+      }, 200);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(animationFrameId);
+      clearTimeout(resizeTimer);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -306,7 +554,8 @@ export default function ContactSection() {
         onComplete: () => ScrollTrigger.refresh(),
       });
 
-      const cards = historyGridRef.current?.querySelectorAll(".iclub-ct-past-card");
+      const cards =
+        historyGridRef.current?.querySelectorAll(".iclub-ct-past-card");
       if (cards && cards.length > 0) {
         gsap.fromTo(
           cards,
@@ -334,7 +583,8 @@ export default function ContactSection() {
 
   useEffect(() => {
     if (!showHistory || !historyGridRef.current) return;
-    const cards = historyGridRef.current.querySelectorAll(".iclub-ct-past-card");
+    const cards =
+      historyGridRef.current.querySelectorAll(".iclub-ct-past-card");
     gsap.fromTo(
       cards,
       { opacity: 0, y: 18, scale: 0.97 },
@@ -363,6 +613,13 @@ export default function ContactSection() {
 
   return (
     <section className="iclub-ct-wrapper" ref={sectionRef} id="contact">
+      {/* Central Energy Nebula & Drifting Bubbles Background Canvas */}
+      <canvas
+        ref={canvasRef}
+        className="iclub-ct-nebula-canvas"
+        aria-hidden="true"
+      />
+
       <div className="iclub-ct-bg-orb iclub-ct-orb-1"></div>
       <div className="iclub-ct-bg-orb iclub-ct-orb-2"></div>
 
@@ -431,7 +688,9 @@ export default function ContactSection() {
             <div className="iclub-ct-history-toggle-row">
               <button
                 type="button"
-                className={`iclub-ct-history-btn ${showHistory ? "active" : ""}`}
+                className={`iclub-ct-history-btn ${
+                  showHistory ? "active" : ""
+                }`}
                 onClick={() => setShowHistory((prev) => !prev)}
                 aria-expanded={showHistory}
               >
@@ -442,7 +701,12 @@ export default function ContactSection() {
                     : "Explore Past Executive Boards"}
                 </span>
                 <span className="iclub-ct-history-chevron">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                  >
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
                 </span>
@@ -457,7 +721,9 @@ export default function ContactSection() {
               <div className="iclub-ct-history-inner">
                 <div className="iclub-ct-history-top">
                   <div>
-                    <span className="iclub-ct-archive-tag">HALL OF LEADERSHIP</span>
+                    <span className="iclub-ct-archive-tag">
+                      HALL OF LEADERSHIP
+                    </span>
                     <h4>Past Executive Committees</h4>
                   </div>
 
@@ -479,18 +745,29 @@ export default function ContactSection() {
 
                 <div className="iclub-ct-past-grid" ref={historyGridRef}>
                   {PAST_BOARDS[activeYear].map((alum, idx) => (
-                    <div key={`${activeYear}-${idx}`} className="iclub-ct-past-card">
+                    <div
+                      key={`${activeYear}-${idx}`}
+                      className="iclub-ct-past-card"
+                    >
                       <div className="iclub-ct-past-card-head">
                         <span className="iclub-ct-past-role">{alum.role}</span>
-                        <span className="iclub-ct-past-batch">{alum.batch}</span>
+                        <span className="iclub-ct-past-batch">
+                          {alum.batch}
+                        </span>
                       </div>
 
                       <h5>{alum.name}</h5>
-                      <span className="iclub-ct-past-dept">{alum.department}</span>
-                      <p className="iclub-ct-past-contrib">{alum.contribution}</p>
+                      <span className="iclub-ct-past-dept">
+                        {alum.department}
+                      </span>
+                      <p className="iclub-ct-past-contrib">
+                        {alum.contribution}
+                      </p>
 
                       <div className="iclub-ct-past-footer">
-                        <span className="iclub-ct-past-term">Term {activeYear}</span>
+                        <span className="iclub-ct-past-term">
+                          Term {activeYear}
+                        </span>
                         <a
                           href={alum.linkedin}
                           target="_blank"
@@ -521,7 +798,12 @@ export default function ContactSection() {
               <div className="iclub-ct-info-list">
                 <div className="iclub-ct-info-item">
                   <div className="iclub-ct-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
                       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                       <circle cx="12" cy="10" r="3" />
                     </svg>
@@ -534,7 +816,12 @@ export default function ContactSection() {
 
                 <div className="iclub-ct-info-item">
                   <div className="iclub-ct-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
                       <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                       <polyline points="22,6 12,13 2,6" />
                     </svg>
@@ -547,7 +834,12 @@ export default function ContactSection() {
 
                 <div className="iclub-ct-info-item">
                   <div className="iclub-ct-icon-box">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
                       <circle cx="12" cy="12" r="10" />
                       <line x1="2" y1="12" x2="22" y2="12" />
                       <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
@@ -589,12 +881,16 @@ export default function ContactSection() {
                       <div className="iclub-ct-social-icon-wrap">
                         {item.icon}
                       </div>
-                      <span className="iclub-ct-social-badge">{item.badge}</span>
+                      <span className="iclub-ct-social-badge">
+                        {item.badge}
+                      </span>
                     </div>
 
                     <div className="iclub-ct-social-tile-body">
                       <h4>{item.name}</h4>
-                      <span className="iclub-ct-social-handle">{item.handle}</span>
+                      <span className="iclub-ct-social-handle">
+                        {item.handle}
+                      </span>
                       <p>{item.description}</p>
                     </div>
                   </a>
@@ -648,7 +944,12 @@ export default function ContactSection() {
                 className="iclub-ct-detail-box"
               >
                 <div className="iclub-ct-detail-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                     <polyline points="22,6 12,13 2,6" />
                   </svg>
