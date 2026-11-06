@@ -190,7 +190,7 @@ const PAST_BOARDS = {
       role: "Treasurer",
       batch: "Batch 14",
       department: "Dept. of ICT",
-      contribution: "oversaw club funding & partner relations",
+      contribution: "Oversaw club funding & partner relations",
       linkedin: "https://linkedin.com",
     },
   ],
@@ -271,7 +271,6 @@ export default function ContactSection() {
 
   const yearKeys = Object.keys(PAST_BOARDS);
 
-  // Smooth Central Energy Nebula + Reduced Drifting Bubbles/Embers Animation
   useEffect(() => {
     const canvas = canvasRef.current;
     const section = sectionRef.current;
@@ -284,7 +283,6 @@ export default function ContactSection() {
     let height = 0;
     let time = 0;
 
-    // Pre-render offscreen sprites once so low-end GPUs never compute heavy gradients per frame
     const createGlowSprite = (size, stops) => {
       const off = document.createElement("canvas");
       off.width = size;
@@ -340,7 +338,6 @@ export default function ContactSection() {
 
       const isMobile = width < 768;
 
-      // Central swirling nebula nodes
       nebulaClouds = Array.from({ length: 7 }, (_, i) => ({
         angle: (i / 7) * Math.PI * 2,
         orbitRadius: (isMobile ? 45 : 85) + (i % 3) * 35,
@@ -350,14 +347,12 @@ export default function ContactSection() {
         isCore: i < 3,
       }));
 
-      // Organic pulsing plasma veins/rings in the center (like the fire shockwaves in the video)
       energyRings = Array.from({ length: 3 }, (_, i) => ({
         progress: i * 0.33,
         speed: 0.0032 + i * 0.0005,
         seed: i * 2.4,
       }));
 
-      // Reduced side bubbles/embers (kept minimal & clean as requested)
       const emberCount = isMobile ? 12 : 22;
       embers = Array.from({ length: emberCount }, (_, i) => {
         const fromLeft = i % 2 === 0;
@@ -417,7 +412,6 @@ export default function ContactSection() {
       const centerX = width * 0.5;
       const centerY = height * 0.46;
 
-      // 1. Draw soft central nebula energy clouds
       for (let i = 0; i < nebulaClouds.length; i++) {
         const c = nebulaClouds[i];
         c.angle += c.speed;
@@ -441,7 +435,6 @@ export default function ContactSection() {
         );
       }
 
-      // 2. Draw central pulsing plasma energy filaments (matching video's central burst)
       ctx.globalAlpha = 1;
       for (let i = 0; i < energyRings.length; i++) {
         const ring = energyRings[i];
@@ -450,13 +443,11 @@ export default function ContactSection() {
         drawPlasmaRing(centerX, centerY, ring, time);
       }
 
-      // 3. Draw reduced drifting side bubbles/embers with subtle motion streak
       for (let i = 0; i < embers.length; i++) {
         const b = embers[i];
         b.x += b.vx + Math.sin(time * 1.2 + b.phase) * 0.18;
         b.y += b.vy;
 
-        // Wrap smoothly around screen edges
         if (b.x < -40) b.x = width + 30;
         if (b.x > width + 40) b.x = -30;
         if (b.y < -40) b.y = height + 30;
@@ -480,7 +471,6 @@ export default function ContactSection() {
 
     initScene();
 
-    // Pause animation when ContactSection is not visible on screen
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
@@ -609,175 +599,309 @@ export default function ContactSection() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  const handleScrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const handleExpandArchiveFromFooter = (e) => {
+    e.preventDefault();
+    setShowHistory(true);
+    const historyEl = document.querySelector(".iclub-ct-history-wrapper");
+    if (historyEl) {
+      historyEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
   const marqueeItems = [...TEAM_MEMBERS, ...TEAM_MEMBERS];
 
   return (
-    <section className="iclub-ct-wrapper" ref={sectionRef} id="contact">
-      {/* Central Energy Nebula & Drifting Bubbles Background Canvas */}
-      <canvas
-        ref={canvasRef}
-        className="iclub-ct-nebula-canvas"
-        aria-hidden="true"
-      />
+    <>
+      <section className="iclub-ct-wrapper" ref={sectionRef} id="contact">
+        <canvas
+          ref={canvasRef}
+          className="iclub-ct-nebula-canvas"
+          aria-hidden="true"
+        />
 
-      <div className="iclub-ct-bg-orb iclub-ct-orb-1"></div>
-      <div className="iclub-ct-bg-orb iclub-ct-orb-2"></div>
+        <div className="iclub-ct-bg-orb iclub-ct-orb-1"></div>
+        <div className="iclub-ct-bg-orb iclub-ct-orb-2"></div>
 
-      <div className="iclub-ct-container">
-        <div className="iclub-ct-header iclub-ct-reveal">
-          <div className="iclub-ct-header-left">
-            <div className="iclub-ct-pill-badge">
-              <span className="iclub-ct-dot"></span> GET IN TOUCH
+        <div className="iclub-ct-container">
+          <div className="iclub-ct-header iclub-ct-reveal">
+            <div className="iclub-ct-header-left">
+              <div className="iclub-ct-pill-badge">
+                <span className="iclub-ct-dot"></span> GET IN TOUCH
+              </div>
+              <h2 className="iclub-ct-main-title">Contact Us</h2>
+              <p className="iclub-ct-subtitle">
+                Have an idea, partnership proposal, or question about our
+                upcoming events at Uva Wellassa University? Reach out to our
+                executive team or connect with our official channels below.
+              </p>
             </div>
-            <h2 className="iclub-ct-main-title">Contact Us</h2>
-            <p className="iclub-ct-subtitle">
-              Have an idea, partnership proposal, or question about our upcoming
-              events at Uva Wellassa University? Reach out to our executive team
-              or connect with our official channels below.
-            </p>
-          </div>
 
-          <div className="iclub-ct-header-right">
-            <span className="iclub-ct-outline-title">Connect</span>
-            <span className="iclub-ct-solid-title">iClub UWU</span>
-          </div>
-        </div>
-
-        <div className="iclub-ct-marquee-section iclub-ct-reveal">
-          <div className="iclub-ct-section-bar">
-            <div className="iclub-ct-bar-title">
-              <span className="iclub-ct-pulse-dot"></span>
-              <h3>Current Executive Committee</h3>
+            <div className="iclub-ct-header-right">
+              <span className="iclub-ct-outline-title">Connect</span>
+              <span className="iclub-ct-solid-title">iClub UWU</span>
             </div>
-            <span className="iclub-ct-hint-badge">
-              Click any card to view profile & email
-            </span>
           </div>
 
-          <div className="iclub-ct-marquee-viewport">
-            <div className="iclub-ct-marquee-track">
-              {marqueeItems.map((member, index) => (
-                <div
-                  key={`${member.id}-${index}`}
-                  className="iclub-ct-member-card"
-                  onClick={() => setSelectedMember(member)}
-                >
-                  <div className="iclub-ct-avatar-wrap">
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      loading="lazy"
-                    />
-                    <span className="iclub-ct-role-pill">{member.role}</span>
-                  </div>
+          <div className="iclub-ct-marquee-section iclub-ct-reveal">
+            <div className="iclub-ct-section-bar">
+              <div className="iclub-ct-bar-title">
+                <span className="iclub-ct-pulse-dot"></span>
+                <h3>Current Executive Committee</h3>
+              </div>
+              <span className="iclub-ct-hint-badge">
+                Click any card to view profile & email
+              </span>
+            </div>
 
-                  <div className="iclub-ct-member-info">
-                    <h4>{member.name}</h4>
-                    <p>{member.batch} • UWU</p>
-                    <div className="iclub-ct-card-action">
-                      <span>View Profile</span>
-                      <span className="iclub-ct-action-arrow">&#8594;</span>
+            <div className="iclub-ct-marquee-viewport">
+              <div className="iclub-ct-marquee-track">
+                {marqueeItems.map((member, index) => (
+                  <div
+                    key={`${member.id}-${index}`}
+                    className="iclub-ct-member-card"
+                    onClick={() => setSelectedMember(member)}
+                  >
+                    <div className="iclub-ct-avatar-wrap">
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        loading="lazy"
+                      />
+                      <span className="iclub-ct-role-pill">{member.role}</span>
+                    </div>
+
+                    <div className="iclub-ct-member-info">
+                      <h4>{member.name}</h4>
+                      <p>{member.batch} • UWU</p>
+                      <div className="iclub-ct-card-action">
+                        <span>View Profile</span>
+                        <span className="iclub-ct-action-arrow">&#8594;</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div className="iclub-ct-history-wrapper">
-            <div className="iclub-ct-history-toggle-row">
-              <button
-                type="button"
-                className={`iclub-ct-history-btn ${
-                  showHistory ? "active" : ""
-                }`}
-                onClick={() => setShowHistory((prev) => !prev)}
-                aria-expanded={showHistory}
+            <div className="iclub-ct-history-wrapper">
+              <div className="iclub-ct-history-toggle-row">
+                <button
+                  type="button"
+                  className={`iclub-ct-history-btn ${
+                    showHistory ? "active" : ""
+                  }`}
+                  onClick={() => setShowHistory((prev) => !prev)}
+                  aria-expanded={showHistory}
+                >
+                  <span className="iclub-ct-history-btn-dot"></span>
+                  <span>
+                    {showHistory
+                      ? "Hide Past Executive Boards"
+                      : "Explore Past Executive Boards"}
+                  </span>
+                  <span className="iclub-ct-history-chevron">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </span>
+                </button>
+              </div>
+
+              <div
+                className="iclub-ct-history-drawer"
+                ref={historyContentRef}
+                style={{ height: 0, opacity: 0, overflow: "hidden" }}
               >
-                <span className="iclub-ct-history-btn-dot"></span>
-                <span>
-                  {showHistory
-                    ? "Hide Past Executive Boards"
-                    : "Explore Past Executive Boards"}
-                </span>
-                <span className="iclub-ct-history-chevron">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                  >
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
-                </span>
-              </button>
-            </div>
+                <div className="iclub-ct-history-inner">
+                  <div className="iclub-ct-history-top">
+                    <div>
+                      <span className="iclub-ct-archive-tag">
+                        HALL OF LEADERSHIP
+                      </span>
+                      <h4>Past Executive Committees</h4>
+                    </div>
 
-            <div
-              className="iclub-ct-history-drawer"
-              ref={historyContentRef}
-              style={{ height: 0, opacity: 0, overflow: "hidden" }}
-            >
-              <div className="iclub-ct-history-inner">
-                <div className="iclub-ct-history-top">
-                  <div>
-                    <span className="iclub-ct-archive-tag">
-                      HALL OF LEADERSHIP
-                    </span>
-                    <h4>Past Executive Committees</h4>
+                    <div className="iclub-ct-year-tabs">
+                      {yearKeys.map((year) => (
+                        <button
+                          key={year}
+                          type="button"
+                          className={`iclub-ct-year-tab ${
+                            activeYear === year ? "selected" : ""
+                          }`}
+                          onClick={() => setActiveYear(year)}
+                        >
+                          {year}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="iclub-ct-year-tabs">
-                    {yearKeys.map((year) => (
-                      <button
-                        key={year}
-                        type="button"
-                        className={`iclub-ct-year-tab ${
-                          activeYear === year ? "selected" : ""
-                        }`}
-                        onClick={() => setActiveYear(year)}
+                  <div className="iclub-ct-past-grid" ref={historyGridRef}>
+                    {PAST_BOARDS[activeYear].map((alum, idx) => (
+                      <div
+                        key={`${activeYear}-${idx}`}
+                        className="iclub-ct-past-card"
                       >
-                        {year}
-                      </button>
+                        <div className="iclub-ct-past-card-head">
+                          <span className="iclub-ct-past-role">
+                            {alum.role}
+                          </span>
+                          <span className="iclub-ct-past-batch">
+                            {alum.batch}
+                          </span>
+                        </div>
+
+                        <h5>{alum.name}</h5>
+                        <span className="iclub-ct-past-dept">
+                          {alum.department}
+                        </span>
+                        <p className="iclub-ct-past-contrib">
+                          {alum.contribution}
+                        </p>
+
+                        <div className="iclub-ct-past-footer">
+                          <span className="iclub-ct-past-term">
+                            Term {activeYear}
+                          </span>
+                          <a
+                            href={alum.linkedin}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="iclub-ct-past-link"
+                          >
+                            LinkedIn &#8599;
+                          </a>
+                        </div>
+                      </div>
                     ))}
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
 
-                <div className="iclub-ct-past-grid" ref={historyGridRef}>
-                  {PAST_BOARDS[activeYear].map((alum, idx) => (
-                    <div
-                      key={`${activeYear}-${idx}`}
-                      className="iclub-ct-past-card"
-                    >
-                      <div className="iclub-ct-past-card-head">
-                        <span className="iclub-ct-past-role">{alum.role}</span>
-                        <span className="iclub-ct-past-batch">
-                          {alum.batch}
-                        </span>
-                      </div>
+          <div className="iclub-ct-main-grid">
+            <div className="iclub-ct-info-column iclub-ct-reveal">
+              <div className="iclub-ct-uni-card">
+                <div className="iclub-ct-uni-tag">OFFICIAL HEADQUARTERS</div>
+                <h3>iClub — Uva Wellassa University</h3>
+                <p>
+                  Empowering undergraduates through technology, innovation, and
+                  collaborative learning across all faculties.
+                </p>
 
-                      <h5>{alum.name}</h5>
-                      <span className="iclub-ct-past-dept">
-                        {alum.department}
-                      </span>
-                      <p className="iclub-ct-past-contrib">
-                        {alum.contribution}
-                      </p>
-
-                      <div className="iclub-ct-past-footer">
-                        <span className="iclub-ct-past-term">
-                          Term {activeYear}
-                        </span>
-                        <a
-                          href={alum.linkedin}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="iclub-ct-past-link"
-                        >
-                          LinkedIn &#8599;
-                        </a>
-                      </div>
+                <div className="iclub-ct-info-list">
+                  <div className="iclub-ct-info-item">
+                    <div className="iclub-ct-icon-box">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                      </svg>
                     </div>
+                    <div>
+                      <span>Location</span>
+                      <strong>Passara Road, Badulla 90000, Sri Lanka</strong>
+                    </div>
+                  </div>
+
+                  <div className="iclub-ct-info-item">
+                    <div className="iclub-ct-icon-box">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                      </svg>
+                    </div>
+                    <div>
+                      <span>Official Email</span>
+                      <strong>hello@iclub.uwu.ac.lk</strong>
+                    </div>
+                  </div>
+
+                  <div className="iclub-ct-info-item">
+                    <div className="iclub-ct-icon-box">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="2" y1="12" x2="22" y2="12" />
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <span>Faculty Portal</span>
+                      <strong>Faculty of Technological Studies • UWU</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="iclub-ct-social-column iclub-ct-reveal">
+              <div className="iclub-ct-social-hub-card">
+                <div className="iclub-ct-uni-tag">COMMUNITY & SOCIAL HUB</div>
+                <h3>Follow Our Digital Channels</h3>
+                <p>
+                  Stay updated with our latest hackathons, tech workshops, and
+                  community highlights through our official platforms.
+                </p>
+
+                <div className="iclub-ct-social-bento">
+                  {SOCIAL_CHANNELS.map((item) => (
+                    <a
+                      key={item.id}
+                      href={item.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="iclub-ct-social-tile"
+                      style={{ "--tile-accent": item.accent }}
+                    >
+                      <div className="iclub-ct-social-popup-pill">
+                        Open {item.name} &#8599;
+                      </div>
+
+                      <div className="iclub-ct-social-tile-top">
+                        <div className="iclub-ct-social-icon-wrap">
+                          {item.icon}
+                        </div>
+                        <span className="iclub-ct-social-badge">
+                          {item.badge}
+                        </span>
+                      </div>
+
+                      <div className="iclub-ct-social-tile-body">
+                        <h4>{item.name}</h4>
+                        <span className="iclub-ct-social-handle">
+                          {item.handle}
+                        </span>
+                        <p>{item.description}</p>
+                      </div>
+                    </a>
                   ))}
                 </div>
               </div>
@@ -785,37 +909,49 @@ export default function ContactSection() {
           </div>
         </div>
 
-        <div className="iclub-ct-main-grid">
-          <div className="iclub-ct-info-column iclub-ct-reveal">
-            <div className="iclub-ct-uni-card">
-              <div className="iclub-ct-uni-tag">OFFICIAL HEADQUARTERS</div>
-              <h3>iClub — Uva Wellassa University</h3>
-              <p>
-                Empowering undergraduates through technology, innovation, and
-                collaborative learning across all faculties.
-              </p>
+        {selectedMember && (
+          <div
+            className="iclub-ct-modal-backdrop"
+            onClick={() => setSelectedMember(null)}
+          >
+            <div
+              className="iclub-ct-modal-card"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="iclub-ct-modal-close"
+                onClick={() => setSelectedMember(null)}
+                aria-label="Close modal"
+              >
+                &#10005;
+              </button>
 
-              <div className="iclub-ct-info-list">
-                <div className="iclub-ct-info-item">
-                  <div className="iclub-ct-icon-box">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
-                  </div>
-                  <div>
-                    <span>Location</span>
-                    <strong>Passara Road, Badulla 90000, Sri Lanka</strong>
-                  </div>
+              <div className="iclub-ct-modal-top">
+                <div className="iclub-ct-modal-img-wrap">
+                  <img src={selectedMember.image} alt={selectedMember.name} />
                 </div>
+                <div className="iclub-ct-modal-headline">
+                  <span className="iclub-ct-modal-badge">
+                    {selectedMember.role}
+                  </span>
+                  <h3>{selectedMember.name}</h3>
+                  <p className="iclub-ct-modal-dept">
+                    {selectedMember.department}
+                  </p>
+                  <span className="iclub-ct-modal-batch">
+                    {selectedMember.batch} • Uva Wellassa University
+                  </span>
+                </div>
+              </div>
 
-                <div className="iclub-ct-info-item">
-                  <div className="iclub-ct-icon-box">
+              <p className="iclub-ct-modal-bio">{selectedMember.bio}</p>
+
+              <div className="iclub-ct-modal-details-single">
+                <a
+                  href={`mailto:${selectedMember.email}`}
+                  className="iclub-ct-detail-box"
+                >
+                  <div className="iclub-ct-detail-icon">
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -827,159 +963,190 @@ export default function ContactSection() {
                     </svg>
                   </div>
                   <div>
-                    <span>Official Email</span>
-                    <strong>hello@iclub.uwu.ac.lk</strong>
+                    <span className="iclub-ct-detail-label">
+                      Official Email
+                    </span>
+                    <strong>{selectedMember.email}</strong>
                   </div>
-                </div>
+                </a>
+              </div>
 
-                <div className="iclub-ct-info-item">
-                  <div className="iclub-ct-icon-box">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <line x1="2" y1="12" x2="22" y2="12" />
-                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <span>Faculty Portal</span>
-                    <strong>Faculty of Technological Studies • UWU</strong>
-                  </div>
-                </div>
+              <div className="iclub-ct-modal-actions">
+                <a
+                  href={`mailto:${selectedMember.email}`}
+                  className="iclub-ct-modal-btn primary"
+                >
+                  Send Email
+                </a>
+                <a
+                  href={selectedMember.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="iclub-ct-modal-btn secondary"
+                >
+                  LinkedIn Profile &#8599;
+                </a>
               </div>
             </div>
           </div>
+        )}
+      </section>
 
-          <div className="iclub-ct-social-column iclub-ct-reveal">
-            <div className="iclub-ct-social-hub-card">
-              <div className="iclub-ct-uni-tag">COMMUNITY & SOCIAL HUB</div>
-              <h3>Follow Our Digital Channels</h3>
-              <p>
-                Stay updated with our latest hackathons, tech workshops, and
-                community highlights through our official platforms.
-              </p>
+      {/* =========================================================
+          DARK OFFICIAL FOOTER BAR (MoraSpirit + NVIDIA Style)
+          ========================================================= */}
+      <footer className="iclub-ft-bar">
+        <div className="iclub-ft-glow-line"></div>
+        <div className="iclub-ft-ambient-glow"></div>
 
-              <div className="iclub-ct-social-bento">
-                {SOCIAL_CHANNELS.map((item) => (
+        <div className="iclub-ft-container">
+          {/* Top Brand & Organized By Row (MoraSpirit Style) */}
+          <div className="iclub-ft-top-row">
+            <div className="iclub-ft-brand-block">
+              <div className="iclub-ft-logo-row">
+                <img
+                  src="/Logo/tlogo.png"
+                  alt="iClub UWU Logo"
+                  className="iclub-ft-logo-img"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+                <span className="iclub-ft-brand-title">
+                  iClub <em>UWU</em>
+                </span>
+              </div>
+
+              <div className="iclub-ft-org-line">
+                <span className="iclub-ft-org-label">ORGANIZED BY</span>
+                <span className="iclub-ft-org-uni">
+                  UVA WELLASSA UNIVERSITY
+                </span>
+                <span className="iclub-ft-org-divider"></span>
+                <span className="iclub-ft-org-dept">
+                  DEPT. OF ICT • FACULTY OF TECHNOLOGICAL STUDIES
+                </span>
+              </div>
+            </div>
+
+            <div className="iclub-ft-status-pill">
+              <span className="iclub-ft-status-dot"></span>
+              <span>BADULLA, SRI LANKA • ACTIVE CHAPTER</span>
+            </div>
+          </div>
+
+          {/* 3-Column Links Grid (NVIDIA Style) */}
+          <div className="iclub-ft-columns">
+            <div className="iclub-ft-col">
+              <h4>Club Information</h4>
+              <ul>
+                <li>
+                  <a href="#about">About iClub UWU</a>
+                </li>
+                <li>
+                  <a href="#contact">Current Executive Committee</a>
+                </li>
+                <li>
                   <a
-                    key={item.id}
-                    href={item.url}
+                    href="#past-boards"
+                    onClick={handleExpandArchiveFromFooter}
+                  >
+                    Hall of Past Leadership
+                  </a>
+                </li>
+                <li>
+                  <a href="#stories">Community Stories & Culture</a>
+                </li>
+              </ul>
+            </div>
+
+            <div className="iclub-ft-col">
+              <h4>Flagship Events & Tracks</h4>
+              <ul>
+                <li>
+                  <a href="#timeline">Tech Fiesta Innovation Summit</a>
+                </li>
+                <li>
+                  <a href="#timeline">HackDay 24-Hour Marathon</a>
+                </li>
+                <li>
+                  <a href="#timeline">CodeSprint Algorithmic Arena</a>
+                </li>
+                <li>
+                  <a href="#timeline">AI, Cloud & Robotics Labs</a>
+                </li>
+              </ul>
+            </div>
+
+            <div className="iclub-ft-col">
+              <h4>Quick Links & Portal</h4>
+              <ul>
+                <li>
+                  <a href="#register">Member Registration</a>
+                </li>
+                <li>
+                  <a href="#timeline">Project Roadmap & Archive</a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.uwu.ac.lk"
                     target="_blank"
                     rel="noreferrer"
-                    className="iclub-ct-social-tile"
-                    style={{ "--tile-accent": item.accent }}
                   >
-                    <div className="iclub-ct-social-popup-pill">
-                      Open {item.name} &#8599;
-                    </div>
-
-                    <div className="iclub-ct-social-tile-top">
-                      <div className="iclub-ct-social-icon-wrap">
-                        {item.icon}
-                      </div>
-                      <span className="iclub-ct-social-badge">
-                        {item.badge}
-                      </span>
-                    </div>
-
-                    <div className="iclub-ct-social-tile-body">
-                      <h4>{item.name}</h4>
-                      <span className="iclub-ct-social-handle">
-                        {item.handle}
-                      </span>
-                      <p>{item.description}</p>
-                    </div>
+                    Uva Wellassa University &#8599;
                   </a>
-                ))}
-              </div>
+                </li>
+                <li>
+                  <a href="mailto:hello@iclub.uwu.ac.lk">
+                    Partner & Sponsorship Inquiry
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="iclub-ft-divider"></div>
+
+          {/* Bottom Bar (No Social Icons - Clean Links + Email + Copyright + Scroll Top) */}
+          <div className="iclub-ft-bottom-row">
+            <div className="iclub-ft-quick-nav">
+              <a href="#about">About</a>
+              <a href="#stories">Stories</a>
+              <a href="#timeline">Timeline</a>
+              <a href="#contact">Contact</a>
+              <a href="mailto:hello@iclub.uwu.ac.lk" className="iclub-ft-email">
+                hello@iclub.uwu.ac.lk
+              </a>
+            </div>
+
+            <div className="iclub-ft-right-meta">
+              <span className="iclub-ft-copyright">
+                © {new Date().getFullYear()} iClub • Uva Wellassa University of
+                Sri Lanka. All rights reserved.
+              </span>
+
+              <button
+                type="button"
+                className="iclub-ft-scroll-top"
+                onClick={handleScrollToTop}
+                aria-label="Scroll to top"
+                title="Back to top"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="18 15 12 9 6 15" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
-      </div>
-
-      {selectedMember && (
-        <div
-          className="iclub-ct-modal-backdrop"
-          onClick={() => setSelectedMember(null)}
-        >
-          <div
-            className="iclub-ct-modal-card"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="iclub-ct-modal-close"
-              onClick={() => setSelectedMember(null)}
-              aria-label="Close modal"
-            >
-              &#10005;
-            </button>
-
-            <div className="iclub-ct-modal-top">
-              <div className="iclub-ct-modal-img-wrap">
-                <img src={selectedMember.image} alt={selectedMember.name} />
-              </div>
-              <div className="iclub-ct-modal-headline">
-                <span className="iclub-ct-modal-badge">
-                  {selectedMember.role}
-                </span>
-                <h3>{selectedMember.name}</h3>
-                <p className="iclub-ct-modal-dept">
-                  {selectedMember.department}
-                </p>
-                <span className="iclub-ct-modal-batch">
-                  {selectedMember.batch} • Uva Wellassa University
-                </span>
-              </div>
-            </div>
-
-            <p className="iclub-ct-modal-bio">{selectedMember.bio}</p>
-
-            <div className="iclub-ct-modal-details-single">
-              <a
-                href={`mailto:${selectedMember.email}`}
-                className="iclub-ct-detail-box"
-              >
-                <div className="iclub-ct-detail-icon">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                    <polyline points="22,6 12,13 2,6" />
-                  </svg>
-                </div>
-                <div>
-                  <span className="iclub-ct-detail-label">Official Email</span>
-                  <strong>{selectedMember.email}</strong>
-                </div>
-              </a>
-            </div>
-
-            <div className="iclub-ct-modal-actions">
-              <a
-                href={`mailto:${selectedMember.email}`}
-                className="iclub-ct-modal-btn primary"
-              >
-                Send Email
-              </a>
-              <a
-                href={selectedMember.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                className="iclub-ct-modal-btn secondary"
-              >
-                LinkedIn Profile &#8599;
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
+      </footer>
+    </>
   );
 }

@@ -1003,6 +1003,294 @@
 }
 
 /* =========================================================
+   DARK OFFICIAL FOOTER BAR (MoraSpirit + NVIDIA Style)
+   ========================================================= */
+.iclub-ft-bar {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(180deg, #041527 0%, #020b16 100%);
+  color: #e2e8f0;
+  padding: 64px 24px 38px;
+  box-sizing: border-box;
+  overflow: hidden;
+  font-family: 'Geist Variable', 'Geist', system-ui, -apple-system, sans-serif;
+}
+
+.iclub-ft-bar *,
+.iclub-ft-bar *::before,
+.iclub-ft-bar *::after {
+  font-family: 'Geist Variable', 'Geist', system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+}
+
+/* Top glowing separator line */
+.iclub-ft-glow-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #0077b6 22%,
+    #00b4d8 50%,
+    #0077b6 78%,
+    transparent 100%
+  );
+  box-shadow: 0 0 20px rgba(0, 180, 216, 0.65);
+}
+
+.iclub-ft-ambient-glow {
+  position: absolute;
+  top: -120px;
+  left: 12%;
+  width: 460px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 180, 216, 0.15) 0%,
+    transparent 70%
+  );
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+.iclub-ft-container {
+  position: relative;
+  max-width: 1240px;
+  margin: 0 auto;
+  z-index: 2;
+}
+
+/* Top Brand & Organized By Row (MoraSpirit Style) */
+.iclub-ft-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.iclub-ft-brand-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.iclub-ft-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.iclub-ft-logo-img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(0, 180, 216, 0.5));
+}
+
+.iclub-ft-brand-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #ffffff;
+}
+
+.iclub-ft-brand-title em {
+  font-style: normal;
+  font-weight: 400;
+  color: #38bdf8;
+  letter-spacing: 4px;
+  margin-left: 4px;
+}
+
+.iclub-ft-org-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.iclub-ft-org-label {
+  color: #38bdf8;
+}
+
+.iclub-ft-org-uni {
+  color: #ffffff;
+}
+
+.iclub-ft-org-divider {
+  width: 1.5px;
+  height: 14px;
+  background: rgba(148, 163, 184, 0.4);
+  margin: 0 4px;
+}
+
+.iclub-ft-org-dept {
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.iclub-ft-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(13, 74, 117, 0.28);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: #bae6fd;
+}
+
+.iclub-ft-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00b4d8;
+  box-shadow: 0 0 10px #00b4d8;
+}
+
+/* 3-Column Links Grid (NVIDIA Style) */
+.iclub-ft-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 44px;
+  margin-bottom: 44px;
+}
+
+.iclub-ft-col h4 {
+  margin: 0 0 14px 0;
+  padding-bottom: 12px;
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.iclub-ft-col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.iclub-ft-col ul li a {
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #38bdf8;
+  transition: color 0.22s ease, transform 0.22s ease;
+  display: inline-block;
+}
+
+.iclub-ft-col ul li a:hover {
+  color: #ffffff;
+  transform: translateX(4px);
+}
+
+/* Horizontal Divider */
+.iclub-ft-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(148, 163, 184, 0.16);
+  margin-bottom: 26px;
+}
+
+/* Bottom Bar Row */
+.iclub-ft-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.iclub-ft-quick-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.iclub-ft-quick-nav a {
+  text-decoration: none;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  transition: color 0.2s ease;
+}
+
+.iclub-ft-quick-nav a:hover {
+  color: #38bdf8;
+}
+
+.iclub-ft-quick-nav a.iclub-ft-email {
+  color: #ffffff;
+  font-weight: 700;
+  padding-left: 16px;
+  border-left: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.iclub-ft-quick-nav a.iclub-ft-email:hover {
+  color: #38bdf8;
+}
+
+.iclub-ft-right-meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.iclub-ft-copyright {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+/* Scroll-to-Top Circular Button (MoraSpirit Style) */
+.iclub-ft-scroll-top {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(7, 42, 71, 0.65);
+  border: 2px solid #38bdf8;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 18px rgba(0, 180, 216, 0.35);
+  transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.2),
+    background 0.28s ease, box-shadow 0.28s ease;
+}
+
+.iclub-ft-scroll-top svg {
+  width: 20px;
+  height: 20px;
+}
+
+.iclub-ft-scroll-top:hover {
+  transform: translateY(-4px) scale(1.06);
+  background: #00b4d8;
+  color: #020b16;
+  box-shadow: 0 0 26px rgba(56, 189, 248, 0.75);
+}
+
+/* =========================================================
    UNIFIED MOBILE & TABLET RESPONSIVE DESIGN
    ========================================================= */
 @media screen and (max-width: 960px) {
@@ -1012,6 +1300,11 @@
 
   .iclub-ct-header-right {
     text-align: left;
+  }
+
+  .iclub-ft-columns {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
   }
 }
 
@@ -1045,5 +1338,34 @@
 
   .iclub-ct-modal-actions {
     flex-direction: column;
+  }
+
+  .iclub-ft-bar {
+    padding: 48px 18px 32px;
+  }
+
+  .iclub-ft-columns {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .iclub-ft-org-divider {
+    display: none;
+  }
+
+  .iclub-ft-quick-nav a.iclub-ft-email {
+    padding-left: 0;
+    border-left: none;
+    width: 100%;
+  }
+
+  .iclub-ft-bottom-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .iclub-ft-right-meta {
+    width: 100%;
+    justify-content: space-between;
   }
 }
