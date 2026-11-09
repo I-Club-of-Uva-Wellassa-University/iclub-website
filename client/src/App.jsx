@@ -5,6 +5,7 @@ import About from '../landing/About'
 import Stories from '../landing/Stories'
 import TimelineSection from '../landing/TimelineSection'
 import Loader from '../components/Loader'
+import Team from '../landing/Team'
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
       </div>
       <Stories />
       <TimelineSection />
+      <Team />
     
       <section
         id="contact"
