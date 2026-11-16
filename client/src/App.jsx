@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import Loader from '../components/Loader' 
 import Navbar from '../components/Navbar'
 import HeroSection from '../landing/HeroSection'
 import About from '../landing/About'
