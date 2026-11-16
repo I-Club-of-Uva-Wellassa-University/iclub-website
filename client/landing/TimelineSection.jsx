@@ -690,7 +690,7 @@ export default function TimelineSection() {
     TIMELINE_SECTIONS[0];
 
   return (
-    <div id="timeline">
+    <div id="timeLine">
       <div className="iclub-tl-desktop-only">
         <section
           className={`iclub-tl-wrapper section-mood-${activeTrack}`}
