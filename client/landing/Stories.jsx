@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Image, useTexture } from '@react-three/drei'
@@ -170,7 +170,7 @@ const Stories = () => {
     () => {
       const mm = gsap.matchMedia()
       const inset = ((1 - START) / 2) * 100
-
+  
       mm.add('(prefers-reduced-motion: no-preference)', () => {
         const tl = gsap.timeline({
           defaults: { ease: 'power2.inOut', duration: 1 },
@@ -178,37 +178,45 @@ const Stories = () => {
             trigger: sectionRef.current,
             start: 'top top',
             end: () => `+=${window.innerHeight * INTRO}`,
-            scrub: 0.8,
+            scrub: 0.3,
             invalidateOnRefresh: true,
+            refreshPriority: -1, // measure after other sections
+            // markers: true,    // uncomment to debug
           },
         })
-
-        tl.fromTo(
-          '.portal-clip',
-          { clipPath: `inset(${inset}% ${inset}% ${inset}% ${inset}% round 32px)` },
-          { clipPath: 'inset(0% 0% 0% 0% round 0px)' },
-          0,
-        )
+  
+        tl.fromTo('.portal-clip',
+            { clipPath: `inset(${inset}% ${inset}% ${inset}% ${inset}% round 32px)` },
+            { clipPath: 'inset(0% 0% 0% 0% round 0px)' }, 0)
           .fromTo('.stories-overlay', { scale: START }, { scale: 1 }, 0)
           .fromTo(portal.current, { s: START }, { s: 1 }, 0)
-          .fromTo(
-            '.portal-ring',
+          .fromTo('.portal-ring',
             { top: `${inset}%`, right: `${inset}%`, bottom: `${inset}%`, left: `${inset}%`, borderRadius: 32 },
-            { top: '0%', right: '0%', bottom: '0%', left: '0%', borderRadius: 0 },
-            0,
-          )
+            { top: '0%', right: '0%', bottom: '0%', left: '0%', borderRadius: 0 }, 0)
           .to('.portal-ring', { opacity: 0, duration: 0.25, ease: 'none' }, 0.75)
           .to('.portal-caption', { opacity: 0, y: 30, duration: 0.35, ease: 'power1.out' }, 0)
       })
-
+  
       mm.add('(prefers-reduced-motion: reduce)', () => {
         gsap.set('.portal-ring, .portal-caption', { display: 'none' })
       })
-
+  
       return () => mm.revert()
     },
     { scope: sectionRef },
   )
+  
+  useEffect(() => {
+    window.history.scrollRestoration = 'manual'
+    const refresh = () => ScrollTrigger.refresh()
+    window.addEventListener('load', refresh)
+    document.fonts?.ready.then(refresh)
+    const t = setTimeout(refresh, 800)
+    return () => {
+      window.removeEventListener('load', refresh)
+      clearTimeout(t)
+    }
+  }, [])
 
   return (
     <section

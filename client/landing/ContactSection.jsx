@@ -3,198 +3,9 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "@fontsource-variable/geist";
 import "./ContactSection.css";
+import { lenis } from "../src/components/smoothScroll";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const TEAM_MEMBERS = [
-  {
-    id: 1,
-    name: "Shan Panditharathana",
-    role: "President",
-    department: "Dept. of ICT, Faculty of Technological Studies",
-    batch: "Batch 16",
-    email: "president@iclub-uwu.lk",
-    linkedin: "https://linkedin.com",
-    bio: "Leading strategic initiatives, university-wide hackathons, and industry partnerships for the iClub community at Uva Wellassa University.",
-    image: "/contact/2.jpg",
-  },
-  {
-    id: 2,
-    name: "Nimasha Chathurangi",
-    role: "Secretary of iClub",
-    department: "Dept. of Computer Science & Informatics",
-    batch: "Batch 17",
-    email: "secretary@iclub-uwu.lk",
-    linkedin: "https://linkedin.com",
-    bio: "Managing official communications, club documentation, and coordinating executive board operations and annual events.",
-    image: "/contact/5.jpg",
-  },
-  {
-    id: 3,
-    name: "Dharmadasa",
-    role: "Vice President",
-    department: "Dept. of ICT, Faculty of Technological Studies",
-    batch: "Batch 18",
-    email: "vp@iclub-uwu.lk",
-    linkedin: "https://linkedin.com",
-    bio: "Overseeing technical workshops, project mentorship programs, and inter-university competitions.",
-    image: "/contact/4.jpg",
-  },
-  {
-    id: 4,
-    name: "V. Dishankan",
-    role: "Treasurer",
-    department: "Dept. of ICT, Faculty of Technological Studies",
-    batch: "Batch 16",
-    email: "treasurer@iclub-uwu.lk",
-    linkedin: "https://linkedin.com",
-    bio: "Handling sponsorship outreach, event budgeting, and financial planning for all club activities.",
-    image: "/contact/6.jpg",
-  },
-  {
-    id: 5,
-    name: "K.G.C. Senarathne",
-    role: "Senior Treasurer / Advisor",
-    department: "Faculty of Technological Studies",
-    batch: "Academic Staff",
-    email: "advisor@iclub-uwu.lk",
-    linkedin: "https://linkedin.com",
-    bio: "Guiding academic excellence, institutional governance, and strategic growth for iClub initiatives.",
-    image: "/contact/5.jpg",
-  },
-  {
-    id: 6,
-    name: "Madhawa Jayawickrama",
-    role: "Lead Designer",
-    department: "Dept. of ICT, Faculty of Technological Studies",
-    batch: "Batch 18",
-    email: "design@iclub-uwu.lk",
-    linkedin: "https://linkedin.com",
-    bio: "Directing visual identity, digital media production, UI/UX systems, and promotional campaigns for iClub.",
-    image: "/contact/1.jpg",
-  },
-];
-
-const PAST_BOARDS = {
-  "2024 / 2025": [
-    {
-      name: "Kasun Kalhara",
-      role: "President",
-      batch: "Batch 15",
-      department: "Dept. of ICT",
-      contribution: "Spearheaded Tech Fiesta 2024 & Industry Bridge",
-      linkedin: "https://linkedin.com",
-    },
-    {
-      name: "Sachini Nimesha",
-      role: "Secretary",
-      batch: "Batch 15",
-      department: "Dept. of ICT",
-      contribution: "Led club restructuring & inter-faculty outreach",
-      linkedin: "https://linkedin.com",
-    },
-    {
-      name: "Chathura Lakmal",
-      role: "Vice President",
-      batch: "Batch 15",
-      department: "Dept. of ICT",
-      contribution: "Coordinated 24-Hour HackDay & coding bootcamps",
-      linkedin: "https://linkedin.com",
-    },
-    {
-      name: "Pabasara Herath",
-      role: "Junior Treasurer",
-      batch: "Batch 16",
-      department: "Dept. of ICT",
-      contribution: "Managed corporate sponsorships & annual budgets",
-      linkedin: "https://linkedin.com",
-    },
-    {
-      name: "Isuru Udana",
-      role: "Chief Editor",
-      batch: "Batch 16",
-      department: "Dept. of ICT",
-      contribution: "Launched the official digital magazine & media unit",
-      linkedin: "https://linkedin.com",
-    },
-    {
-      name: "Sanduni Perera",
-      role: "Event Coordinator",
-      batch: "Batch 16",
-      department: "Dept. of ICT",
-      contribution: "Directed logistics for 800+ student attendees",
-      linkedin: "https://linkedin.com",
-    },
-  ],
-  "2023 / 2024": [
-    {
-      name: "Janith Liyanage",
-      role: "President",
-      batch: "Batch 14",
-      department: "Dept. of ICT",
-      contribution: "Initiated open-source community chapters at UWU",
-      linkedin: "https://linkedin.com",
-    },
-    {
-      name: "kaveesha Gimhani",
-      role: "Secretary",
-      batch: "Batch 14",
-      department: "Dept. of ICT",
-      contribution: "Established digital membership & alumni network",
-      linkedin: "https://linkedin.com",
-    },
-    {
-      name: "Malith Perera",
-      role: "Vice President",
-      batch: "Batch 14",
-      department: "Dept. of ICT",
-      contribution: "Organized cloud computing & AI awareness series",
-      linkedin: "https://linkedin.com",
-    },
-    {
-      name: "Thilina Bandara",
-      role: "Chief Editor",
-      batch: "Batch 15",
-      department: "Dept. of ICT",
-      contribution: "Rebranded iClub visual identity & social presence",
-      linkedin: "https://linkedin.com",
-    },
-  ],
-  "2022 / 2023": [
-    {
-      name: "Nuwan Pradeep",
-      role: "President",
-      batch: "Batch 13",
-      department: "Dept. of ICT",
-      contribution: "Revitalized on-campus tech events & workshops",
-      linkedin: "https://linkedin.com",
-    },
-    {
-      name: "Hashini Silva",
-      role: "Secretary",
-      batch: "Batch 13",
-      department: "Dept. of ICT",
-      contribution: "Coordinated virtual & hybrid guest lecture series",
-      linkedin: "https://linkedin.com",
-    },
-    {
-      name: "Gayantha Rathnayake",
-      role: "Vice President",
-      batch: "Batch 13",
-      department: "Dept. of ICT",
-      contribution: "Mentored undergraduate software project teams",
-      linkedin: "https://linkedin.com",
-    },
-    {
-      name: "Dinesh Karunarathne",
-      role: "Treasurer",
-      batch: "Batch 14",
-      department: "Dept. of ICT",
-      contribution: "Oversaw club funding & partner relations",
-      linkedin: "https://linkedin.com",
-    },
-  ],
-};
 
 const SOCIAL_CHANNELS = [
   {
@@ -269,7 +80,6 @@ export default function ContactSection() {
   const [showHistory, setShowHistory] = useState(false);
   const [activeYear, setActiveYear] = useState("2024 / 2025");
 
-  const yearKeys = Object.keys(PAST_BOARDS);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -600,11 +410,9 @@ export default function ContactSection() {
   }, []);
 
   const handleScrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
+    if (lenis) lenis.scrollTo(0, { duration: 1.4 })
+    else window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   const handleExpandArchiveFromFooter = (e) => {
     e.preventDefault();
@@ -615,7 +423,6 @@ export default function ContactSection() {
     }
   };
 
-  const marqueeItems = [...TEAM_MEMBERS, ...TEAM_MEMBERS];
 
   return (
     <>
@@ -649,149 +456,6 @@ export default function ContactSection() {
             </div>
           </div>
 
-          <div className="iclub-ct-marquee-section iclub-ct-reveal">
-            <div className="iclub-ct-section-bar">
-              <div className="iclub-ct-bar-title">
-                <span className="iclub-ct-pulse-dot"></span>
-                <h3>Current Executive Committee</h3>
-              </div>
-              <span className="iclub-ct-hint-badge">
-                Click any card to view profile & email
-              </span>
-            </div>
-
-            <div className="iclub-ct-marquee-viewport">
-              <div className="iclub-ct-marquee-track">
-                {marqueeItems.map((member, index) => (
-                  <div
-                    key={`${member.id}-${index}`}
-                    className="iclub-ct-member-card"
-                    onClick={() => setSelectedMember(member)}
-                  >
-                    <div className="iclub-ct-avatar-wrap">
-                      <img
-                        src={member.image}
-                        alt={member.name}
-                        loading="lazy"
-                      />
-                      <span className="iclub-ct-role-pill">{member.role}</span>
-                    </div>
-
-                    <div className="iclub-ct-member-info">
-                      <h4>{member.name}</h4>
-                      <p>{member.batch} • UWU</p>
-                      <div className="iclub-ct-card-action">
-                        <span>View Profile</span>
-                        <span className="iclub-ct-action-arrow">&#8594;</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="iclub-ct-history-wrapper">
-              <div className="iclub-ct-history-toggle-row">
-                <button
-                  type="button"
-                  className={`iclub-ct-history-btn ${
-                    showHistory ? "active" : ""
-                  }`}
-                  onClick={() => setShowHistory((prev) => !prev)}
-                  aria-expanded={showHistory}
-                >
-                  <span className="iclub-ct-history-btn-dot"></span>
-                  <span>
-                    {showHistory
-                      ? "Hide Past Executive Boards"
-                      : "Explore Past Executive Boards"}
-                  </span>
-                  <span className="iclub-ct-history-chevron">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                    >
-                      <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                  </span>
-                </button>
-              </div>
-
-              <div
-                className="iclub-ct-history-drawer"
-                ref={historyContentRef}
-                style={{ height: 0, opacity: 0, overflow: "hidden" }}
-              >
-                <div className="iclub-ct-history-inner">
-                  <div className="iclub-ct-history-top">
-                    <div>
-                      <span className="iclub-ct-archive-tag">
-                        HALL OF LEADERSHIP
-                      </span>
-                      <h4>Past Executive Committees</h4>
-                    </div>
-
-                    <div className="iclub-ct-year-tabs">
-                      {yearKeys.map((year) => (
-                        <button
-                          key={year}
-                          type="button"
-                          className={`iclub-ct-year-tab ${
-                            activeYear === year ? "selected" : ""
-                          }`}
-                          onClick={() => setActiveYear(year)}
-                        >
-                          {year}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="iclub-ct-past-grid" ref={historyGridRef}>
-                    {PAST_BOARDS[activeYear].map((alum, idx) => (
-                      <div
-                        key={`${activeYear}-${idx}`}
-                        className="iclub-ct-past-card"
-                      >
-                        <div className="iclub-ct-past-card-head">
-                          <span className="iclub-ct-past-role">
-                            {alum.role}
-                          </span>
-                          <span className="iclub-ct-past-batch">
-                            {alum.batch}
-                          </span>
-                        </div>
-
-                        <h5>{alum.name}</h5>
-                        <span className="iclub-ct-past-dept">
-                          {alum.department}
-                        </span>
-                        <p className="iclub-ct-past-contrib">
-                          {alum.contribution}
-                        </p>
-
-                        <div className="iclub-ct-past-footer">
-                          <span className="iclub-ct-past-term">
-                            Term {activeYear}
-                          </span>
-                          <a
-                            href={alum.linkedin}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="iclub-ct-past-link"
-                          >
-                            LinkedIn &#8599;
-                          </a>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <div className="iclub-ct-main-grid">
             <div className="iclub-ct-info-column iclub-ct-reveal">
@@ -909,87 +573,6 @@ export default function ContactSection() {
           </div>
         </div>
 
-        {selectedMember && (
-          <div
-            className="iclub-ct-modal-backdrop"
-            onClick={() => setSelectedMember(null)}
-          >
-            <div
-              className="iclub-ct-modal-card"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                className="iclub-ct-modal-close"
-                onClick={() => setSelectedMember(null)}
-                aria-label="Close modal"
-              >
-                &#10005;
-              </button>
-
-              <div className="iclub-ct-modal-top">
-                <div className="iclub-ct-modal-img-wrap">
-                  <img src={selectedMember.image} alt={selectedMember.name} />
-                </div>
-                <div className="iclub-ct-modal-headline">
-                  <span className="iclub-ct-modal-badge">
-                    {selectedMember.role}
-                  </span>
-                  <h3>{selectedMember.name}</h3>
-                  <p className="iclub-ct-modal-dept">
-                    {selectedMember.department}
-                  </p>
-                  <span className="iclub-ct-modal-batch">
-                    {selectedMember.batch} • Uva Wellassa University
-                  </span>
-                </div>
-              </div>
-
-              <p className="iclub-ct-modal-bio">{selectedMember.bio}</p>
-
-              <div className="iclub-ct-modal-details-single">
-                <a
-                  href={`mailto:${selectedMember.email}`}
-                  className="iclub-ct-detail-box"
-                >
-                  <div className="iclub-ct-detail-icon">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                      <polyline points="22,6 12,13 2,6" />
-                    </svg>
-                  </div>
-                  <div>
-                    <span className="iclub-ct-detail-label">
-                      Official Email
-                    </span>
-                    <strong>{selectedMember.email}</strong>
-                  </div>
-                </a>
-              </div>
-
-              <div className="iclub-ct-modal-actions">
-                <a
-                  href={`mailto:${selectedMember.email}`}
-                  className="iclub-ct-modal-btn primary"
-                >
-                  Send Email
-                </a>
-                <a
-                  href={selectedMember.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="iclub-ct-modal-btn secondary"
-                >
-                  LinkedIn Profile &#8599;
-                </a>
-              </div>
-            </div>
-          </div>
-        )}
       </section>
 
       {/* =========================================================

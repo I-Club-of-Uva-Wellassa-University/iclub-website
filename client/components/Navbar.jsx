@@ -1,10 +1,13 @@
+import { lenis } from '../src/components/smoothScroll'
 import { X, Menu } from 'lucide-react'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
+
 const links = [
   { label: 'About', href: '#about' },
+  { label: 'TimeLine', href: '#timeLine' },
+  { label: 'Team', href: '#team'},
   { label: 'Stories', href: '#stories' },
-  { label: 'TimeLine', href: '#timeline' },
   { label: 'Contact', href: '#contact' },
 ]
 
@@ -90,17 +93,16 @@ const Navbar = () => {
       isManualScrolling.current = true
       if (scrollTimeout.current) clearTimeout(scrollTimeout.current)
 
-      target.scrollIntoView({ behavior: 'smooth' })
-
+      if (lenis) lenis.scrollTo(target, { duration: 1.4 })
+      else target.scrollIntoView({ behavior: 'smooth' })
+          
       scrollTimeout.current = setTimeout(() => {
         isManualScrolling.current = false
-      }, 1000)
+      }, 1600)
     }
   }
 
-  const glass = `border border-white/10 backdrop-blur-xl shadow-lg shadow-black/30 transition-colors duration-300 ${
-    scrolled ? 'bg-night-900/85' : 'bg-night-900/50'
-  }`
+  const glass = 'border border-white/10 bg-night-900/85 backdrop-blur-xl shadow-lg shadow-black/30'
 
   return (
     <nav className='fixed top-0 left-0 z-50 h-20 w-full'>
@@ -110,7 +112,8 @@ const Navbar = () => {
           onClick={(e) => {
             e.preventDefault()
             setActive('Home')
-            window.scrollTo({ top: 0, behavior: 'smooth' })
+            if (lenis) lenis.scrollTo(0, { duration: 1.4 })
+            else window.scrollTo({ top: 0, behavior: 'smooth' })
           }}
           className='group relative flex h-12 items-center overflow-hidden rounded-full bg-gradient-to-l from-cyan-300 to-cyan-100 px-6 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(137,203,219,0.35)]'
         >
