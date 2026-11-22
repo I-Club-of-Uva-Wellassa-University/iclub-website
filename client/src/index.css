@@ -6,6 +6,14 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  --font-display: 'Anton', Impact, sans-serif;
+}
+
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+@theme {
   --color-sky-950: #04202E;
   --color-sky-900: #0A3C55;
   --color-sky-800: #0F5E83;
@@ -148,3 +156,7 @@
     @apply font-sans;
   }
 }
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }

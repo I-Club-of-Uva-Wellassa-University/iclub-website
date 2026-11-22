@@ -159,6 +159,7 @@ const HeroSection = () => {
           .from('.hero-bg', { opacity: 0, duration: 1.6, ease: 'power2.out' }, 0)
           .from('.hero-3d', { opacity: 0, duration: 1.6, ease: 'power2.out' }, 0.15)
           .from('.hero-line', { yPercent: 110, duration: 1.1, stagger: 0.14, ease: 'power4.out' }, 0)
+          .from('.hero-eyebrow', { y: 16, opacity: 0, duration: 0.8, ease: 'power3.out' }, 0.2)
           .call(startDecode, null, 0.01)
           .call(() => setRevealed(true), null, 0.01)
           .from('.hero-sub', { y: 24, opacity: 0, duration: 0.9, ease: 'power3.out' }, 0.5)
@@ -198,7 +199,7 @@ const HeroSection = () => {
     <section
       ref={sectionRef}
       id="hero"
-      className="sticky top-0 z-0 h-screen w-full overflow-hidden bg-gradient-to-b from-[#eaeef6] to-[#98D5EE]"
+      className="sticky top-0 z-0 h-[100svh] w-full overflow-hidden bg-gradient-to-b from-[#eaeef6] to-[#98D5EE]"
     >
       <div className="hero-bg pointer-events-none absolute inset-0 z-0 overflow-hidden">
         {BLOBS.map((b, i) => (
@@ -212,6 +213,8 @@ const HeroSection = () => {
       </div>
 
       <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,rgba(234,238,246,0.7)_0%,transparent_65%)]" />
+      <div className="aurora-par pointer-events-none absolute inset-0 z-[2]" data-depth="40" aria-hidden="true">   
+      </div>
       
       {/* මේක තමයි කළු වෙන්න හේතුවුණේ. ඔරිජිනල් තිබ්බ විදිහටම කළු පාට අයින් කරලා හැදුවා */}
       <div className="hero-dim pointer-events-none absolute inset-0 z-[5] opacity-1" />
@@ -237,29 +240,62 @@ const HeroSection = () => {
         />
       )}
 
-      <div className="pointer-events-none relative z-20 flex h-full flex-col items-center justify-center px-6 text-center">
+      <div className="pointer-events-none relative z-20 flex h-full flex-col items-center justify-center px-6 pb-16 text-center md:pb-10">
         <div ref={blockRef} className="flex flex-col items-center">
-          <h1 className="text-[clamp(2.85rem,6.4vw,5rem)] font-extrabold leading-[1.05] tracking-tight md:text-[clamp(1.6rem,5.6vw,5rem)]">
-            <span className="block overflow-hidden pb-2">
-              <span className="hero-line block whitespace-nowrap">
-                <span className="relative inline-block text-sky-950">
-                  <span className="invisible">Bridging generations,</span>
-                  <span className="decode absolute inset-0" data-final="Bridging generations,">
-                    Bridging generations,
-                  </span>
-                </span>
+          <p className="hero-eyebrow mb-4 flex items-center justify-center gap-2 text-[10px] font-medium uppercase tracking-[0.2em] text-sky-900 sm:gap-3 sm:text-xs sm:tracking-[0.35em]">
+            <span className="h-2 w-2 shrink-0 rounded-full bg-sky-500 shadow-[0_0_10px_#38bdf8]" />
+            ICT Student Community
+            <span className="hidden sm:inline">· Uva Wellassa University</span>
+          </p>
+          
+          <h1 className="font-display font-normal uppercase tracking-tight">
+
+            <span className="block text-[clamp(3rem,17vw,8.5rem)] leading-[0.92] md:hidden">
+              <span className="block overflow-hidden pb-1">
+                <span className="hero-line block whitespace-nowrap text-sky-950">Bridging</span>
+              </span>
+              <span className="block overflow-hidden pb-1">
+                <span className="hero-line block whitespace-nowrap text-sky-950">generations,</span>
+              </span>
+              <span className="block overflow-hidden pb-1">
+                <span className="hero-line block whitespace-nowrap bg-gradient-to-r from-sky-700 via-sky-500 to-sky-700 bg-clip-text text-transparent">empowering</span>
+              </span>
+              <span className="block overflow-hidden pb-2">
+                <span className="hero-line block whitespace-nowrap text-transparent [-webkit-text-stroke:1.5px_#0A3C55]">innovation.</span>
               </span>
             </span>
 
-            <span className="block overflow-hidden pb-3">
-              <span className="hero-line block whitespace-nowrap">
-                <span className="relative inline-block">
-                  <span className="invisible">empowering innovation.</span>
-                  <span
-                    className="decode absolute inset-0 bg-gradient-to-r from-sky-700 via-sky-500 to-sky-700 bg-clip-text text-transparent"
-                    data-final="empowering innovation."
-                  >
-                    empowering innovation.
+            <span className="hidden text-[clamp(1.6rem,8vw,8.5rem)] leading-[0.95] md:block">
+              <span className="block overflow-hidden pb-2">
+                <span className="hero-line block whitespace-nowrap">
+                  <span className="relative inline-block text-sky-950">
+                    <span className="invisible">Bridging generations,</span>
+                    <span className="decode absolute inset-0" data-final="Bridging generations,">
+                      Bridging generations,
+                    </span>
+                  </span>
+                </span>
+              </span>
+
+              <span className="block overflow-hidden pb-3">
+                <span className="hero-line block whitespace-nowrap">
+                  <span className="relative inline-block">
+                    <span className="invisible">empowering</span>
+                    <span
+                      className="decode absolute inset-0 bg-gradient-to-r from-sky-700 to-sky-500 bg-clip-text text-transparent"
+                      data-final="empowering"
+                    >
+                      empowering
+                    </span>
+                  </span>{' '}
+                  <span className="relative inline-block">
+                    <span className="invisible">innovation.</span>
+                    <span
+                      className="decode absolute inset-0 text-transparent [-webkit-text-stroke:2px_#0A3C55]"
+                      data-final="innovation."
+                    >
+                      innovation.
+                    </span>
                   </span>
                 </span>
               </span>

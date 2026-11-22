@@ -21,7 +21,8 @@ const TERMS = [
   {
     id: 'new', 
     label: 'Newly appointed',
-    period: '', 
+    period: '2026/2027', 
+    blurb: "Every executive is appointed at the Annual General Meeting. Meet the 2026 / 27 team, and the ones who built the way before us.",
     leaders: {
       president: 'Full Name',
       'vp-tech': 'Full Name',
@@ -38,7 +39,8 @@ const TERMS = [
   {
     id: 'former', 
     label: 'Former team',
-    period: '',
+    period: '2026',
+    blurb: "The 2026 team served before them. They set up the foundations that this year's team now builds on.",
     leaders: {
       president: 'Full Name',
       'vp-tech': 'Full Name',
@@ -224,7 +226,7 @@ const Team = () => {
       return
     }
     busy.current = true
-    gsap.to(root.current.querySelectorAll('.swap-panels, .swap-lower'), {
+    gsap.to(root.current.querySelectorAll('.swap-blurb, .swap-panels, .swap-lower'), {
       opacity: 0,
       y: -16,
       duration: 0.35,
@@ -246,7 +248,7 @@ const Team = () => {
       return undefined
     }
     const tw = gsap.fromTo(
-      root.current.querySelectorAll('.swap-panels, .swap-lower'),
+      root.current.querySelectorAll('.swap-blurb, .swap-panels, .swap-lower'),
       { opacity: 0, y: 24 },
       {
         opacity: 1,
@@ -344,7 +346,7 @@ const Team = () => {
       <div className="pointer-events-none absolute -left-40 top-1/4 h-[460px] w-[460px] rounded-full bg-aqua-400/10 blur-3xl" />
       <div
         aria-hidden="true"
-        className="t-bg-word pointer-events-none absolute -left-10 top-16 select-none whitespace-nowrap text-[clamp(9rem,30vw,28rem)] font-extrabold leading-none text-transparent [-webkit-text-stroke:1.5px_rgba(95,212,240,0.12)]"
+        className="t-bg-word pointer-events-none absolute md:left-10 top-16 select-none whitespace-nowrap text-[clamp(9rem,30vw,28rem)] font-extrabold leading-none text-transparent [-webkit-text-stroke:1.5px_rgba(95,212,240,0.12)]"
       >
         TEAM
       </div>
@@ -363,10 +365,7 @@ const Team = () => {
                 <span className="t-line block text-aqua-400">behind the club.</span>
               </span>
             </h2>
-            <p className="mt-6 max-w-md text-night-400">
-              Every executive is appointed at the Annual General Meeting. Meet this year's team, and the ones who built
-              the way before us.
-            </p>
+            <p className="swap-blurb mt-6 min-h-[6.5rem] max-w-md text-night-400">{term.blurb}</p>
           </div>
 
           <div className="t-controls flex flex-col items-start gap-6 lg:items-end">

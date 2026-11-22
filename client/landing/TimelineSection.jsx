@@ -873,7 +873,7 @@ export default function TimelineSection() {
                 ref={endArrowRef}
                 onClick={scrollToContact}
               >
-                <span>SCROLL TO CONTACT</span>
+                <span>SCROLL TO Board</span>
                 <div className="iclub-tl-arrow-icon">&#8595;</div>
               </div>
             </div>
