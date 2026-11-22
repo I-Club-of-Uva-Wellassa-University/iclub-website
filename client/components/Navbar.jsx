@@ -83,30 +83,46 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : ''
+    if (open) lenis?.stop()
+    else lenis?.start()
+    return () => {
+      document.body.style.overflow = ''
+      lenis?.start()
+    }
+  }, [open])
+
   const handleNavClick = (e, link) => {
     e.preventDefault()
     setActive(link.label)
     setOpen(false)
-
+  
     const target = document.getElementById(link.href.slice(1))
-    if (target) {
-      isManualScrolling.current = true
-      if (scrollTimeout.current) clearTimeout(scrollTimeout.current)
-
-      if (lenis) lenis.scrollTo(target, { duration: 1.4 })
-      else target.scrollIntoView({ behavior: 'smooth' })
-          
-      scrollTimeout.current = setTimeout(() => {
-        isManualScrolling.current = false
-      }, 1600)
-    }
+    if (!target) return
+  
+    isManualScrolling.current = true
+    if (scrollTimeout.current) clearTimeout(scrollTimeout.current)
+  
+    setTimeout(() => {
+      if (lenis) {
+        lenis.start()
+        lenis.scrollTo(target, { duration: 1.4, force: true })
+      } else {
+        target.scrollIntoView({ behavior: 'smooth' })
+      }
+    }, 50)
+  
+    scrollTimeout.current = setTimeout(() => {
+      isManualScrolling.current = false
+    }, 1700)
   }
 
   const glass = 'border border-white/10 bg-night-900/85 backdrop-blur-xl shadow-lg shadow-black/30'
 
   return (
     <nav className='fixed top-0 left-0 z-50 h-20 w-full'>
-      <div className='flex h-full items-center justify-between px-6 md:px-10'>
+      <div className='relative z-50 flex h-full items-center justify-between px-6 md:px-10'>
         <a
           href='#hero'
           onClick={(e) => {
@@ -162,25 +178,47 @@ const Navbar = () => {
         </button>
       </div>
 
-      <ul
-        className={`mx-6 flex flex-col gap-1 rounded-3xl p-3 text-center md:hidden ${glass} transition-all duration-300 ${
-          open ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-3 opacity-0'
+      <div
+        aria-hidden={!open}
+        className={`fixed inset-0 z-40 flex flex-col justify-center bg-night-950 px-8 transition-[clip-path] duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] md:hidden ${
+          open ? 'pointer-events-auto' : 'pointer-events-none'
         }`}
+        style={{
+          clipPath: open
+            ? 'circle(150% at calc(100% - 48px) 40px)'
+            : 'circle(0% at calc(100% - 48px) 40px)',
+        }}
       >
-        {links.map((link) => (
-          <li key={link.label}>
-            <a
-              href={link.href}
-              onClick={(e) => handleNavClick(e, link)}
-              className={`block rounded-full px-5 py-2 transition-colors ${
-                active === link.label ? 'bg-cyan-200 font-medium text-ink' : 'text-night-400 hover:text-white'
-              }`}
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </ul>
+        <ul className='flex flex-col gap-2'>
+          {links.map((link, i) => (
+            <li key={link.label} className='overflow-hidden'>
+              <a
+                href={link.href}
+                tabIndex={open ? 0 : -1}
+                onClick={(e) => handleNavClick(e, link)}
+                style={{ transitionDelay: open ? `${250 + i * 80}ms` : '0ms' }}
+                className={`block font-display text-[18vw] uppercase leading-[0.95] transition-transform duration-[600ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${
+                  open ? 'translate-y-0' : 'translate-y-[110%]'
+                } ${active === link.label ? 'text-cyan-200' : 'text-white'}`}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <a
+          href='#contact'
+          tabIndex={open ? 0 : -1}
+          onClick={(e) => handleNavClick(e, { label: 'Contact', href: '#contact' })}
+          style={{ transitionDelay: open ? '700ms' : '0ms' }}
+          className={`mt-10 flex h-12 w-fit items-center rounded-full bg-gradient-to-r from-cyan-100 to-cyan-300 px-7 font-medium text-ink transition-all duration-500 ${
+            open ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+          }`}
+        >
+          Register
+        </a>
+      </div>
     </nav>
   )
 }

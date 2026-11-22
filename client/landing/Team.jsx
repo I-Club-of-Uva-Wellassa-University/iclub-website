@@ -346,7 +346,7 @@ const Team = () => {
       <div className="pointer-events-none absolute -left-40 top-1/4 h-[460px] w-[460px] rounded-full bg-aqua-400/10 blur-3xl" />
       <div
         aria-hidden="true"
-        className="t-bg-word pointer-events-none absolute -left-10 top-16 select-none whitespace-nowrap text-[clamp(9rem,30vw,28rem)] font-extrabold leading-none text-transparent [-webkit-text-stroke:1.5px_rgba(95,212,240,0.12)]"
+        className="t-bg-word pointer-events-none absolute md:left-10 top-16 select-none whitespace-nowrap text-[clamp(9rem,30vw,28rem)] font-extrabold leading-none text-transparent [-webkit-text-stroke:1.5px_rgba(95,212,240,0.12)]"
       >
         TEAM
       </div>
