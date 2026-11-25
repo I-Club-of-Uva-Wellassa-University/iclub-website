@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>iClub UWU — Official Website Launch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --navy-deep: #041527;
+      --navy-main: #072a47;
+      --navy-mid: #0d4a75;
+      --cyan-glow: #00b4d8;
+      --sky-glow: #38bdf8;
+      --text-white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+      background: var(--navy-deep);
+      color: var(--text-white);
+    }
+
+    /* =========================================
+       SCENE & FALLBACK SKY BACKGROUND
+       ========================================= */
+    .launch-stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(
+        180deg,
+        #7ac1e9 0%,
+        #b5e0f7 36%,
+        #d8f0fc 62%,
+        #0d3b5e 100%
+      );
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* =========================================
+       LAYER 1 & LAYER 4: PIXEL-ALIGNED IMAGES
+       ========================================= */
+    .scene-img {
+      position: absolute;
+      inset: -2.5%;
+      width: 105%;
+      height: 105%;
+      object-fit: cover;
+      object-position: center bottom;
+      pointer-events: none;
+      transition: transform 0.25s ease-out;
+      will-change: transform;
+    }
+
+    .bg-layer {
+      z-index: 1;
+      filter: saturate(1.05) contrast(1.04);
+    }
+
+    .front-layer {
+      z-index: 4;
+      filter: drop-shadow(0 -8px 25px rgba(4, 21, 39, 0.32));
+    }
+
+    /* =========================================
+       LAYER 2: AMBIENT PARTICLES CANVAS
+       ========================================= */
+    #bgCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* =========================================
+       LAYER 3: SOFTENED "COMING SOON" BEHIND PEAK
+       ========================================= */
+    .behind-text-wrap {
+      position: absolute;
+      top: 9vh;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      text-align: center;
+      pointer-events: none;
+      width: 100%;
+      opacity: 0.48; /* පිටුපස අකුරුවල opacity එක (අවශ්‍ය නම් 0.35 - 0.65 අතර වෙනස් කරන්න) */
+      transition: transform 0.25s ease-out, opacity 0.4s ease;
+      will-change: transform;
+    }
+
+    .text-coming {
+      display: block;
+      font-family: "Outfit", sans-serif;
+      font-size: clamp(2.6rem, 6.8vw, 6.4rem);
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      line-height: 0.92;
+      color: rgba(255, 255, 255, 0.92);
+      text-align: left;
+      width: fit-content;
+      margin: 0 auto;
+      transform: translateX(-18%);
+      text-shadow: 0 10px 28px rgba(7, 42, 71, 0.2);
+      animation: heroReveal 1.1s cubic-bezier(0.2, 0.85, 0.25, 1) forwards;
+    }
+
+    .text-soon {
+      display: block;
+      font-family: "Outfit", sans-serif;
+      font-size: clamp(6rem, 18.5vw, 17.5rem);
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      line-height: 0.82;
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 0 16px 48px rgba(7, 42, 71, 0.26);
+      animation: heroReveal 1.25s cubic-bezier(0.2, 0.85, 0.25, 1) forwards;
+    }
+
+    @keyframes heroReveal {
+      from {
+        opacity: 0;
+        filter: blur(10px);
+        letter-spacing: 0.12em;
+      }
+      to {
+        opacity: 1;
+        filter: blur(0);
+      }
+    }
+
+    /* =========================================
+       LAYER 5: SOFT DRIFTING MIST & DARK GROUNDING
+       ========================================= */
+    .mist-layer {
+      position: absolute;
+      bottom: 0;
+      left: -15%;
+      width: 130%;
+      height: 46vh;
+      z-index: 5;
+      pointer-events: none;
+      background: radial-gradient(
+          ellipse at 50% 85%,
+          rgba(0, 180, 216, 0.2) 0%,
+          transparent 58%
+        ),
+        linear-gradient(
+          180deg,
+          transparent 0%,
+          rgba(4, 21, 39, 0.56) 52%,
+          rgba(2, 11, 22, 0.94) 100%
+        );
+      animation: mistDrift 14s ease-in-out infinite alternate;
+    }
+
+    @keyframes mistDrift {
+      0% {
+        transform: translateX(-2%) translateY(0);
+      }
+      100% {
+        transform: translateX(2%) translateY(-8px);
+      }
+    }
+
+    /* =========================================
+       LAYER 10: FOREGROUND CONTENT (LOWER & HIGHLIGHTED)
+       ========================================= */
+    .foreground-ui {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: auto;
+      margin-bottom: 6.5vh; /* පහළට සෙට් කරලා පිටුපස අකුරු වලින් වෙන් කළා */
+      padding: 0 20px;
+      width: 100%;
+      max-width: 920px;
+    }
+
+    .iclub-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: rgba(4, 21, 39, 0.86);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(56, 189, 248, 0.72);
+      padding: 8px 22px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 2.3px;
+      color: #ffffff;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55),
+        0 0 22px rgba(0, 180, 216, 0.35);
+      text-shadow: 0 0 12px rgba(56, 189, 248, 0.55);
+    }
+
+    .iclub-badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--sky-glow);
+      box-shadow: 0 0 12px var(--sky-glow), 0 0 20px var(--cyan-glow);
+      animation: statusPulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.35);
+        opacity: 0.6;
+      }
+    }
+
+    /* =========================================
+       HIGHLIGHTED COUNTDOWN FLIP/SPLIT CARDS
+       ========================================= */
+    .countdown-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: clamp(14px, 2.8vw, 32px);
+      margin-bottom: 30px;
+    }
+
+    .time-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .time-group.hidden {
+      display: none;
+    }
+
+    .digits-pair {
+      display: flex;
+      gap: clamp(7px, 1vw, 12px);
+    }
+
+    .digit-card {
+      position: relative;
+      width: clamp(56px, 7.6vw, 86px);
+      height: clamp(74px, 10.2vw, 114px);
+      background: linear-gradient(180deg, #ffffff 0%, #eaf7ff 100%);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 42px rgba(0, 0, 0, 0.68),
+        0 0 28px rgba(56, 189, 248, 0.42),
+        0 0 0 2px rgba(186, 230, 253, 0.92),
+        inset 0 2px 0 #ffffff;
+      overflow: hidden;
+      perspective: 400px;
+    }
+
+    .digit-card::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1.5px;
+      background: rgba(7, 42, 71, 0.16);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .digit-value {
+      font-family: "Outfit", sans-serif;
+      font-size: clamp(2.7rem, 5.4vw, 4.8rem);
+      font-weight: 900;
+      color: #041e36;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      display: inline-block;
+      will-change: transform, opacity;
+    }
+
+    .digit-card.accent-tick {
+      box-shadow: 0 20px 42px rgba(0, 0, 0, 0.68),
+        0 0 34px rgba(0, 180, 216, 0.6),
+        0 0 0 2px rgba(56, 189, 248, 0.95),
+        inset 0 2px 0 #ffffff;
+    }
+
+    .digit-card.accent-tick .digit-value {
+      color: #0096c7;
+      text-shadow: 0 0 14px rgba(0, 180, 216, 0.3);
+    }
+
+    .digit-value.tick-anim {
+      animation: smoothDigitFlip 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes smoothDigitFlip {
+      0% {
+        transform: translateY(-28%) rotateX(45deg) scale(0.92);
+        opacity: 0.15;
+      }
+      100% {
+        transform: translateY(0) rotateX(0deg) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .time-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 2.8px;
+      color: #ffffff;
+      text-transform: uppercase;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95),
+        0 0 16px rgba(56, 189, 248, 0.75);
+    }
+
+    .time-colon {
+      font-family: "Outfit", sans-serif;
+      font-size: clamp(2.4rem, 4.8vw, 4rem);
+      font-weight: 900;
+      color: #7dd3fc;
+      line-height: clamp(74px, 10.2vw, 114px);
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.9),
+        0 4px 16px rgba(0, 0, 0, 0.8);
+      animation: colonBlink 1s steps(1, end) infinite;
+    }
+
+    .time-colon.paused {
+      animation: none;
+      opacity: 0.55;
+    }
+
+    .time-colon.hidden {
+      display: none;
+    }
+
+    @keyframes colonBlink {
+      0%,
+      50% {
+        opacity: 1;
+      }
+      51%,
+      100% {
+        opacity: 0.35;
+      }
+    }
+
+    /* =========================================
+       BIG CENTER "BEGIN" HYPERLINK BUTTON
+       ========================================= */
+    .begin-wrap {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+    }
+
+    .begin-wrap.hidden-until-zero {
+      opacity: 0;
+      transform: translateY(18px) scale(0.92);
+      pointer-events: none;
+    }
+
+    .begin-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      min-width: clamp(240px, 28vw, 330px);
+      padding: 20px 56px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-family: "Outfit", sans-serif;
+      font-size: clamp(1.18rem, 2vw, 1.58rem);
+      font-weight: 900;
+      letter-spacing: 0.24em;
+      text-indent: 0.24em;
+      color: #ffffff;
+      background: linear-gradient(135deg, #072a47 0%, #0077b6 50%, #00b4d8 100%);
+      border: 2px solid rgba(224, 242, 254, 0.9);
+      box-shadow: 0 20px 48px rgba(0, 180, 216, 0.52),
+        0 0 28px rgba(56, 189, 248, 0.4),
+        0 0 0 6px rgba(56, 189, 248, 0.18),
+        inset 0 2px 12px rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.25),
+        box-shadow 0.32s ease, border-color 0.32s ease;
+    }
+
+    .begin-btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 70%;
+      height: 100%;
+      background: linear-gradient(
+        110deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.42) 50%,
+        transparent 100%
+      );
+      transition: left 0.65s ease;
+    }
+
+    .begin-btn:hover::before {
+      left: 140%;
+    }
+
+    .begin-btn:hover {
+      transform: translateY(-5px) scale(1.04);
+      border-color: #ffffff;
+      box-shadow: 0 24px 62px rgba(0, 180, 216, 0.72),
+        0 0 40px rgba(56, 189, 248, 0.75),
+        0 0 0 8px rgba(56, 189, 248, 0.26);
+    }
+
+    .begin-btn:active {
+      transform: translateY(-1px) scale(0.99);
+    }
+
+    .begin-btn.launch-ready {
+      background: linear-gradient(135deg, #0077b6 0%, #00b4d8 50%, #38bdf8 100%);
+      animation: readyPulse 1.6s ease-in-out infinite;
+    }
+
+    @keyframes readyPulse {
+      0%,
+      100% {
+        box-shadow: 0 18px 50px rgba(0, 180, 216, 0.6),
+          0 0 0 6px rgba(56, 189, 248, 0.24);
+      }
+      50% {
+        box-shadow: 0 24px 72px rgba(56, 189, 248, 0.95),
+          0 0 0 14px rgba(56, 189, 248, 0.38);
+      }
+    }
+
+    .begin-arrow {
+      display: inline-flex;
+      transition: transform 0.3s ease;
+    }
+
+    .begin-btn:hover .begin-arrow {
+      transform: translateX(6px);
+    }
+
+    .launch-caption {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1.6px;
+      color: #e0f2fe;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95),
+        0 0 14px rgba(56, 189, 248, 0.55);
+    }
+
+    /* =========================================
+       ONLY 3-DOT MENU BUTTON (TOP RIGHT)
+       ========================================= */
+    .menu-anchor {
+      position: fixed;
+      top: 22px;
+      right: 22px;
+      z-index: 60;
+    }
+
+    .three-dot-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.45);
+      background: rgba(4, 21, 39, 0.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(2, 11, 22, 0.3);
+      transition: all 0.25s ease;
+    }
+
+    .three-dot-btn:hover,
+    .three-dot-btn.open {
+      background: rgba(7, 42, 71, 0.9);
+      border-color: var(--sky-glow);
+      transform: scale(1.06);
+    }
+
+    .timer-menu-panel {
+      position: absolute;
+      top: 56px;
+      right: 0;
+      width: 310px;
+      background: rgba(4, 21, 39, 0.94);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 24px 55px rgba(0, 0, 0, 0.65);
+      opacity: 0;
+      transform: translateY(-10px) scale(0.96);
+      pointer-events: none;
+      transition: opacity 0.26s ease, transform 0.26s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+    }
+
+    .timer-menu-panel.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .panel-head h3 {
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #ffffff;
+      text-transform: uppercase;
+    }
+
+    .panel-status {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(0, 180, 216, 0.2);
+      color: var(--sky-glow);
+    }
+
+    .panel-status.paused {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+    }
+
+    .panel-status.done {
+      background: rgba(16, 185, 129, 0.22);
+      color: #34d399;
+    }
+
+    .ctrl-row {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .ctrl-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .ctrl-btn.primary {
+      background: linear-gradient(135deg, #0077b6, #00b4d8);
+      color: #ffffff;
+    }
+
+    .ctrl-btn.primary.is-running {
+      background: linear-gradient(135deg, #b45309, #f59e0b);
+      color: #020b16;
+    }
+
+    .ctrl-btn.secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #e2e8f0;
+    }
+
+    .ctrl-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+    }
+
+    .panel-section-label {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .time-inputs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .input-box span {
+      font-size: 0.64rem;
+      font-weight: 700;
+      color: #7dd3fc;
+      text-align: center;
+    }
+
+    .input-box input {
+      width: 100%;
+      background: rgba(2, 11, 22, 0.78);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 10px;
+      padding: 8px 6px;
+      color: #ffffff;
+      font-family: "Outfit", sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-align: center;
+      outline: none;
+      user-select: text;
+    }
+
+    .input-box input:focus {
+      border-color: var(--cyan-glow);
+      box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.25);
+    }
+
+    .apply-btn {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 9px;
+      background: rgba(56, 189, 248, 0.18);
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      color: #bae6fd;
+      font-family: inherit;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .apply-btn:hover {
+      background: var(--cyan-glow);
+      color: #020b16;
+    }
+
+    .preset-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .preset-chip {
+      flex: 1;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 6px 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .preset-chip:hover {
+      border-color: var(--sky-glow);
+      color: #ffffff;
+      background: rgba(0, 180, 216, 0.2);
+    }
+
+    .url-input {
+      width: 100%;
+      background: rgba(2, 11, 22, 0.78);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 10px;
+      padding: 8px 10px;
+      color: #e0f2fe;
+      font-size: 0.76rem;
+      font-family: inherit;
+      outline: none;
+      margin-bottom: 12px;
+      user-select: text;
+    }
+
+    .url-input:focus {
+      border-color: var(--cyan-glow);
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      padding-top: 10px;
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+      cursor: pointer;
+    }
+
+    .toggle-row input {
+      accent-color: var(--cyan-glow);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    /* =========================================
+       SMOOTH LAUNCH CURTAIN TRANSITION
+       ========================================= */
+    .launch-curtain {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: radial-gradient(circle at center, #00b4d8 0%, #072a47 55%, #020b16 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .launch-curtain.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .curtain-title {
+      font-family: "Outfit", sans-serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      color: #ffffff;
+      text-transform: uppercase;
+    }
+
+    .curtain-sub {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #bae6fd;
+    }
+
+    @media screen and (max-width: 640px) {
+      .behind-text-wrap {
+        top: 14vh;
+      }
+      .text-coming {
+        transform: translateX(-8%);
+      }
+      .foreground-ui {
+        margin-bottom: 7vh;
+      }
+      .begin-btn {
+        padding: 16px 38px;
+      }
+      .timer-menu-panel {
+        width: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="launch-stage" id="launchStage">
+    <!-- LAYER 1: Full Background Image -->
+    <img
+      src="bg.jpg"
+      class="scene-img bg-layer"
+      id="bgImage"
+      alt=""
+      aria-hidden="true"
+    />
+
+    <!-- LAYER 2: Ambient Floating Particles -->
+    <canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+    <!-- LAYER 3: GIANT TEXT BEHIND THE MOUNTAIN PEAK -->
+    <div class="behind-text-wrap" id="behindText">
+      <span class="text-coming">COMING</span>
+      <span class="text-soon">SOON</span>
+    </div>
+
+    <!-- LAYER 4: Foreground Cutout Mountain (Same Dimensions PNG) -->
+    <img
+      src="peak-front.png"
+      class="scene-img front-layer"
+      id="frontImage"
+      alt=""
+      aria-hidden="true"
+    />
+
+    <!-- LAYER 5: SOFT DRIFTING MIST -->
+    <div class="mist-layer" aria-hidden="true"></div>
+
+    <!-- LAYER 10: COUNTDOWN + BIG BEGIN BUTTON -->
+    <section class="foreground-ui">
+      <div class="iclub-badge">
+        <span class="iclub-badge-dot"></span>
+        <span>iClub • Uva Wellassa University</span>
+      </div>
+
+      <!-- Countdown Timer Display -->
+      <div class="countdown-row" id="countdownRow" aria-live="polite">
+        <div class="time-group hidden" id="hoursGroup">
+          <div class="digits-pair">
+            <div class="digit-card"><span class="digit-value" id="h1">0</span></div>
+            <div class="digit-card"><span class="digit-value" id="h2">0</span></div>
+          </div>
+          <span class="time-label">Hours</span>
+        </div>
+
+        <span class="time-colon hidden" id="hoursColon">:</span>
+
+        <div class="time-group">
+          <div class="digits-pair">
+            <div class="digit-card"><span class="digit-value" id="m1">1</span></div>
+            <div class="digit-card"><span class="digit-value" id="m2">0</span></div>
+          </div>
+          <span class="time-label">Minutes</span>
+        </div>
+
+        <span class="time-colon" id="minColon">:</span>
+
+        <div class="time-group">
+          <div class="digits-pair">
+            <div class="digit-card"><span class="digit-value" id="s1">0</span></div>
+            <div class="digit-card accent-tick">
+              <span class="digit-value" id="s2">0</span>
+            </div>
+          </div>
+          <span class="time-label">Seconds</span>
+        </div>
+      </div>
+
+      <!-- Big Center BEGIN Hyperlink Button -->
+      <div class="begin-wrap" id="beginWrap">
+        <a
+          id="beginBtn"
+          href="https://iclub.uwu.ac.lk"
+          target="_self"
+          class="begin-btn"
+        >
+          <span>BEGIN</span>
+          <span class="begin-arrow" aria-hidden="true">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </span>
+        </a>
+        <span class="launch-caption" id="launchCaption">
+          OFFICIAL PUBLIC RELEASE • CLICK BEGIN TO ENTER
+        </span>
+      </div>
+    </section>
+
+    <!-- ONLY TOP-RIGHT 3-DOT MENU -->
+    <div class="menu-anchor" id="menuAnchor">
+      <button
+        type="button"
+        class="three-dot-btn"
+        id="threeDotBtn"
+        aria-label="Countdown Controls"
+        title="Manage Countdown"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="12" cy="5" r="2.2" />
+          <circle cx="12" cy="12" r="2.2" />
+          <circle cx="12" cy="19" r="2.2" />
+        </svg>
+      </button>
+
+      <div class="timer-menu-panel" id="timerMenuPanel">
+        <div class="panel-head">
+          <h3>Launch Controls</h3>
+          <span class="panel-status" id="statusBadge">RUNNING</span>
+        </div>
+
+        <div class="ctrl-row">
+          <button type="button" class="ctrl-btn primary is-running" id="startPauseBtn">
+            Pause
+          </button>
+          <button type="button" class="ctrl-btn secondary" id="resetBtn">
+            Reset
+          </button>
+        </div>
+
+        <span class="panel-section-label">Set Custom Timer</span>
+        <div class="time-inputs-grid">
+          <label class="input-box">
+            <span>HRS</span>
+            <input type="number" id="inputHrs" min="0" max="99" value="0" />
+          </label>
+          <label class="input-box">
+            <span>MIN</span>
+            <input type="number" id="inputMin" min="0" max="59" value="10" />
+          </label>
+          <label class="input-box">
+            <span>SEC</span>
+            <input type="number" id="inputSec" min="0" max="59" value="0" />
+          </label>
+        </div>
+
+        <button type="button" class="apply-btn" id="applyTimeBtn">
+          Apply &amp; Set Timer
+        </button>
+
+        <div class="preset-row">
+          <button type="button" class="preset-chip" data-sec="600">10m</button>
+          <button type="button" class="preset-chip" data-sec="300">5m</button>
+          <button type="button" class="preset-chip" data-sec="60">1m</button>
+          <button type="button" class="preset-chip" data-sec="15">15s</button>
+        </div>
+
+        <span class="panel-section-label">Target Website URL (BEGIN Link)</span>
+        <input
+          type="url"
+          id="targetUrlInput"
+          class="url-input"
+          placeholder="https://your-iclub-site.com"
+        />
+
+        <label class="toggle-row">
+          <span>Hide BEGIN until 00:00</span>
+          <input type="checkbox" id="hideUntilZeroToggle" />
+        </label>
+      </div>
+    </div>
+
+    <!-- Smooth Launch Transition Curtain -->
+    <div class="launch-curtain" id="launchCurtain">
+      <div class="curtain-title">WELCOME TO iCLUB</div>
+      <div class="curtain-sub">LAUNCHING OFFICIAL PORTAL...</div>
+    </div>
+  </main>
+
+  <script>
+    // =========================================================
+    // CONFIGURATION: Change your live iClub website URL here
+    // =========================================================
+    const DEFAULT_SITE_URL = "https://iclub.uwu.ac.lk";
+    const DEFAULT_SECONDS = 10 * 60; // 10 Minutes default
+
+    const safeGet = (key, fallback) => {
+      try {
+        const val = localStorage.getItem(key);
+        return val !== null ? val : fallback;
+      } catch {
+        return fallback;
+      }
+    };
+    const safeSet = (key, val) => {
+      try {
+        localStorage.setItem(key, val);
+      } catch {}
+    };
+
+    let configuredDuration = parseInt(safeGet("iclub_launch_dur", DEFAULT_SECONDS), 10) || DEFAULT_SECONDS;
+    let remainingSeconds = configuredDuration;
+    let isRunning = true;
+    let timerInterval = null;
+    let targetUrl = safeGet("iclub_launch_url", DEFAULT_SITE_URL);
+    let hideUntilZero = safeGet("iclub_hide_begin", "false") === "true";
+
+    const els = {
+      h1: document.getElementById("h1"),
+      h2: document.getElementById("h2"),
+      m1: document.getElementById("m1"),
+      m2: document.getElementById("m2"),
+      s1: document.getElementById("s1"),
+      s2: document.getElementById("s2"),
+      hoursGroup: document.getElementById("hoursGroup"),
+      hoursColon: document.getElementById("hoursColon"),
+      minColon: document.getElementById("minColon"),
+      beginWrap: document.getElementById("beginWrap"),
+      beginBtn: document.getElementById("beginBtn"),
+      launchCaption: document.getElementById("launchCaption"),
+      threeDotBtn: document.getElementById("threeDotBtn"),
+      timerMenuPanel: document.getElementById("timerMenuPanel"),
+      menuAnchor: document.getElementById("menuAnchor"),
+      statusBadge: document.getElementById("statusBadge"),
+      startPauseBtn: document.getElementById("startPauseBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      inputHrs: document.getElementById("inputHrs"),
+      inputMin: document.getElementById("inputMin"),
+      inputSec: document.getElementById("inputSec"),
+      applyTimeBtn: document.getElementById("applyTimeBtn"),
+      targetUrlInput: document.getElementById("targetUrlInput"),
+      hideUntilZeroToggle: document.getElementById("hideUntilZeroToggle"),
+      launchCurtain: document.getElementById("launchCurtain"),
+      behindText: document.getElementById("behindText"),
+      bgImage: document.getElementById("bgImage"),
+      frontImage: document.getElementById("frontImage"),
+    };
+
+    function setDigit(el, newChar) {
+      if (el.textContent !== newChar) {
+        el.textContent = newChar;
+        el.classList.remove("tick-anim");
+        void el.offsetWidth;
+        el.classList.add("tick-anim");
+      }
+    }
+
+    function syncInputsFromSeconds(totalSec) {
+      const h = Math.floor(totalSec / 3600);
+      const m = Math.floor((totalSec % 3600) / 60);
+      const s = totalSec % 60;
+      els.inputHrs.value = h;
+      els.inputMin.value = m;
+      els.inputSec.value = s;
+    }
+
+    function updateBeginVisibility() {
+      const isZero = remainingSeconds <= 0;
+      if (hideUntilZero && !isZero) {
+        els.beginWrap.classList.add("hidden-until-zero");
+      } else {
+        els.beginWrap.classList.remove("hidden-until-zero");
+      }
+
+      if (isZero) {
+        els.beginBtn.classList.add("launch-ready");
+        els.launchCaption.textContent = "COUNTDOWN COMPLETE • READY TO LAUNCH";
+      } else {
+        els.beginBtn.classList.remove("launch-ready");
+        els.launchCaption.textContent = "OFFICIAL PUBLIC RELEASE • CLICK BEGIN TO ENTER";
+      }
+    }
+
+    function updateControlsUI() {
+      if (remainingSeconds <= 0) {
+        els.statusBadge.textContent = "READY";
+        els.statusBadge.className = "panel-status done";
+        els.startPauseBtn.textContent = "Start";
+        els.startPauseBtn.classList.remove("is-running");
+        els.minColon.classList.add("paused");
+        els.hoursColon.classList.add("paused");
+      } else if (isRunning) {
+        els.statusBadge.textContent = "RUNNING";
+        els.statusBadge.className = "panel-status";
+        els.startPauseBtn.textContent = "Pause";
+        els.startPauseBtn.classList.add("is-running");
+        els.minColon.classList.remove("paused");
+        els.hoursColon.classList.remove("paused");
+      } else {
+        els.statusBadge.textContent = "PAUSED";
+        els.statusBadge.className = "panel-status paused";
+        els.startPauseBtn.textContent = "Start";
+        els.startPauseBtn.classList.remove("is-running");
+        els.minColon.classList.add("paused");
+        els.hoursColon.classList.add("paused");
+      }
+      updateBeginVisibility();
+    }
+
+    function renderTimer() {
+      const total = Math.max(0, remainingSeconds);
+      const hrs = Math.floor(total / 3600);
+      const mins = Math.floor((total % 3600) / 60);
+      const secs = total % 60;
+
+      const showHours = hrs > 0 || configuredDuration >= 3600;
+      els.hoursGroup.classList.toggle("hidden", !showHours);
+      els.hoursColon.classList.toggle("hidden", !showHours);
+
+      const hStr = String(hrs).padStart(2, "0");
+      const mStr = String(mins).padStart(2, "0");
+      const sStr = String(secs).padStart(2, "0");
+
+      setDigit(els.h1, hStr[0]);
+      setDigit(els.h2, hStr[1]);
+      setDigit(els.m1, mStr[0]);
+      setDigit(els.m2, mStr[1]);
+      setDigit(els.s1, sStr[0]);
+      setDigit(els.s2, sStr[1]);
+
+      updateControlsUI();
+    }
+
+    function startTimer() {
+      if (remainingSeconds <= 0) {
+        remainingSeconds = configuredDuration;
+      }
+      isRunning = true;
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (remainingSeconds > 0) {
+          remainingSeconds--;
+          renderTimer();
+        } else {
+          pauseTimer();
+        }
+      }, 1000);
+      renderTimer();
+    }
+
+    function pauseTimer() {
+      isRunning = false;
+      clearInterval(timerInterval);
+      updateControlsUI();
+    }
+
+    function resetTimer() {
+      remainingSeconds = configuredDuration;
+      renderTimer();
+    }
+
+    function setCustomDuration(totalSec, autoStart = false) {
+      configuredDuration = Math.max(1, totalSec);
+      remainingSeconds = configuredDuration;
+      safeSet("iclub_launch_dur", String(configuredDuration));
+      syncInputsFromSeconds(configuredDuration);
+      if (autoStart) {
+        startTimer();
+      } else {
+        renderTimer();
+      }
+    }
+
+    function applyTargetUrl(url) {
+      const clean = (url || "").trim() || DEFAULT_SITE_URL;
+      targetUrl = clean;
+      els.beginBtn.setAttribute("href", targetUrl);
+      els.targetUrlInput.value = targetUrl;
+      safeSet("iclub_launch_url", targetUrl);
+    }
+
+    els.threeDotBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const willOpen = !els.timerMenuPanel.classList.contains("open");
+      els.timerMenuPanel.classList.toggle("open", willOpen);
+      els.threeDotBtn.classList.toggle("open", willOpen);
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!els.menuAnchor.contains(e.target)) {
+        els.timerMenuPanel.classList.remove("open");
+        els.threeDotBtn.classList.remove("open");
+      }
+    });
+
+    els.startPauseBtn.addEventListener("click", () => {
+      if (isRunning) pauseTimer();
+      else startTimer();
+    });
+
+    els.resetBtn.addEventListener("click", () => {
+      resetTimer();
+    });
+
+    els.applyTimeBtn.addEventListener("click", () => {
+      const h = Math.max(0, parseInt(els.inputHrs.value, 10) || 0);
+      const m = Math.max(0, parseInt(els.inputMin.value, 10) || 0);
+      const s = Math.max(0, parseInt(els.inputSec.value, 10) || 0);
+      const total = h * 3600 + m * 60 + s;
+      if (total > 0) {
+        setCustomDuration(total, isRunning);
+      }
+    });
+
+    document.querySelectorAll(".preset-chip").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const sec = parseInt(btn.getAttribute("data-sec"), 10);
+        setCustomDuration(sec, true);
+      });
+    });
+
+    els.targetUrlInput.addEventListener("change", () => {
+      applyTargetUrl(els.targetUrlInput.value);
+    });
+
+    els.hideUntilZeroToggle.checked = hideUntilZero;
+    els.hideUntilZeroToggle.addEventListener("change", (e) => {
+      hideUntilZero = e.target.checked;
+      safeSet("iclub_hide_begin", String(hideUntilZero));
+      updateBeginVisibility();
+    });
+
+    // Smooth Same-Tab Hyperlink Navigation on BEGIN click
+    els.beginBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const dest = els.beginBtn.getAttribute("href") || DEFAULT_SITE_URL;
+      els.launchCurtain.classList.add("active");
+      setTimeout(() => {
+        window.location.href = dest;
+      }, 550);
+    });
+
+    // Smooth 3D Parallax without double edges
+    window.addEventListener("mousemove", (e) => {
+      const nx = (e.clientX / window.innerWidth - 0.5) * 2;
+      const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+
+      const imgTransform = `translate3d(${nx * 10}px, ${ny * 5}px, 0)`;
+      els.bgImage.style.transform = imgTransform;
+      els.frontImage.style.transform = imgTransform;
+      els.behindText.style.transform = `translate3d(calc(-50% + ${nx * -22}px), ${ny * -10}px, 0)`;
+    });
+
+    // Ambient Floating Glow Particles
+    (function initCanvas() {
+      const canvas = document.getElementById("bgCanvas");
+      const ctx = canvas.getContext("2d");
+      let w = (canvas.width = window.innerWidth);
+      let h = (canvas.height = window.innerHeight);
+
+      const particles = Array.from({ length: 26 }, (_, i) => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: 1.4 + Math.random() * 2.8,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: -0.18 - Math.random() * 0.35,
+        alpha: 0.25 + Math.random() * 0.45,
+        cyan: i % 2 === 0,
+      }));
+
+      window.addEventListener("resize", () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      });
+
+      function loop() {
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.y < -10) p.y = h + 10;
+          if (p.x < -10) p.x = w + 10;
+          if (p.x > w + 10) p.x = -10;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.cyan
+            ? `rgba(0, 180, 216, ${p.alpha})`
+            : `rgba(255, 255, 255, ${p.alpha})`;
+          ctx.fill();
+        }
+        requestAnimationFrame(loop);
+      }
+      loop();
+    })();
+
+    applyTargetUrl(targetUrl);
+    syncInputsFromSeconds(configuredDuration);
+    startTimer();
+  </script>
+</body>
+</html>
