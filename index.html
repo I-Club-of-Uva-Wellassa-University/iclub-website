@@ -107,7 +107,7 @@
       text-align: center;
       pointer-events: none;
       width: 100%;
-      opacity: 0.48; /* පිටුපස අකුරුවල opacity එක (අවශ්‍ය නම් 0.35 - 0.65 අතර වෙනස් කරන්න) */
+      opacity: 0.48; 
       transition: transform 0.25s ease-out, opacity 0.4s ease;
       will-change: transform;
     }
@@ -818,10 +818,42 @@
         width: 280px;
       }
     }
+
+    /* Top-Left iClub Logo */
+    .top-left-logo {
+      position: fixed;
+      top: 22px;
+      left: 24px;
+      z-index: 60;
+      pointer-events: none;
+    }
+
+    .top-left-logo img {
+      height: 38px; 
+      width: auto;
+      display: block;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 14px rgba(0, 180, 216, 0.45));
+    }
+
+    @media screen and (max-width: 640px) {
+      .top-left-logo {
+        top: 18px;
+        left: 16px;
+      }
+      .top-left-logo img {
+        height: 50px;
+      }
+    }
   </style>
 </head>
 <body>
   <main class="launch-stage" id="launchStage">
+
+    <!-- Top-Left iClub Logo -->
+    <div class="top-left-logo">
+      <img src="logo.png" alt="iClub Logo" />
+    </div>
     <!-- LAYER 1: Full Background Image -->
     <img
       src="bg.jpg"
@@ -1061,6 +1093,8 @@
       bgImage: document.getElementById("bgImage"),
       frontImage: document.getElementById("frontImage"),
     };
+
+    
 
     function setDigit(el, newChar) {
       if (el.textContent !== newChar) {
